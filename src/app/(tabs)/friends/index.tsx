@@ -43,7 +43,6 @@ const Friends = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="inverted" backgroundColor="#101010" />
       <View
         style={{
           paddingHorizontal: resize(16),
@@ -73,7 +72,6 @@ export default Friends
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#101010",
   },
   friendCardContainer: {
     paddingHorizontal: resize(16),

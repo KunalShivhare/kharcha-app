@@ -1,16 +1,21 @@
-import { StatusBar } from "expo-status-bar"
 import { Button, StyleSheet, Text } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useAuth } from "../../../providers/AuthProvider"
+import { Link, router } from "expo-router"
 
 const Home = () => {
   const { signOut } = useAuth()
+  const onAddExpense =() => {
+    router.push('/addExpense')
+  }
+  const onModal =() => {
+    router.push('/modal')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Home, Screen!</Text>
-      <Button title="Sign Out" onPress={signOut}></Button>
-      <StatusBar style="auto" />
+      <Button title="Add Expense" onPress={onAddExpense}></Button>
+      <Button title="Open modal" onPress={onModal}></Button>
     </SafeAreaView>
   )
 }
@@ -20,6 +25,7 @@ export default Home
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: COLORS.dark50,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 })

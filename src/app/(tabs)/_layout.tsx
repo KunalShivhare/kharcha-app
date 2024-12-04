@@ -4,7 +4,7 @@ import { Redirect, Tabs } from "expo-router"
 import { ThemeProvider } from "@react-navigation/native"
 import { useAuth } from "../../providers/AuthProvider"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { StyleSheet } from "react-native"
+import { StatusBar, StyleSheet } from "react-native"
 
 export default function RootLayout() {
   const { isAuthenticated } = useAuth()
@@ -27,6 +27,7 @@ export default function RootLayout() {
           },
         }}
       >
+         <StatusBar backgroundColor="#212325" />
         <Tabs>
           <Tabs.Screen
             name="home/index"
