@@ -17,8 +17,8 @@ export default function RootLayout() {
       value={{
         dark: true,
         colors: {
-          primary: '#00A86B',
-          background: '#000',
+          primary: '#1CC29F',
+          background: '#101010',
           card: '#292B2D',
           text: 'rgb(229, 229, 231)',
           border: 'rgb(39, 39, 41)',

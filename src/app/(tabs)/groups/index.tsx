@@ -6,11 +6,13 @@ import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
 import { faker } from '@faker-js/faker/.';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useGroups } from './hooks';
+import Button from '@/src/components/buttons/button';
+import { Text } from '@/src/components/text';
 
 const Groups = () => {
-  const { owed, own } = useGroups();
+  const { owed, own, onSettleUp, onViewDetails, onBalance } = useGroups();
   return (
     <View>
       <Header title="Group" />
@@ -22,12 +24,24 @@ const Groups = () => {
           <VStack style={styles.groupInfoContainer}>
             <HStack style={styles.justifyBetween}>
               <VStack>
-                <Text style={styles.texWhite}>Total Owed</Text>
-                <Text style={[styles.texWhite, styles.paddingT10]}>{`+$${owed}`}</Text>
+                <Text variant={'label4_regular'} fontColor="#979797" style={styles.texWhite}>
+                  Total Owed
+                </Text>
+                <Text
+                  variant={'label1_regular'}
+                  fontColor="#1CC29F"
+                  style={styles.paddingT10}
+                >{`+$${owed}`}</Text>
               </VStack>
               <VStack>
-                <Text style={styles.texWhite}>Total Owe</Text>
-                <Text style={[styles.texWhite, styles.paddingT10]}>{`-$${own}`}</Text>
+                <Text variant={'label4_regular'} fontColor="#979797" style={styles.texWhite}>
+                  Total Owe
+                </Text>
+                <Text
+                  variant={'label1_regular'}
+                  fontColor={COLORS.orange}
+                  style={[styles.texWhite, styles.paddingT10]}
+                >{`-$${own}`}</Text>
               </VStack>
             </HStack>
             <ProgressBar
@@ -37,6 +51,70 @@ const Groups = () => {
                 marginTop: resize(8),
               }}
             />
+          </VStack>
+        </HStack>
+        <HStack style={[styles.justifyBetween, styles.paddingT10]}>
+          <Button type="Primary" size="short" title="Settle up" onPress={onSettleUp} />
+          <Button
+            type="Secondary"
+            size="short"
+            title="View Details"
+            onPress={onViewDetails}
+            customStyle={styles.backgroundTransparent}
+          />
+          <Button
+            type="Secondary"
+            size="short"
+            title="Balance"
+            onPress={onBalance}
+            customStyle={styles.backgroundTransparent}
+          />
+        </HStack>
+      </VStack>
+      <VStack
+        style={{
+          padding: 16,
+        }}
+      >
+        <HStack>
+          <VStack>
+            <Image
+              source={{ uri: faker.image.avatar() }}
+              style={{
+                height: 50,
+                width: 50,
+                resizeMode: 'contain',
+                borderRadius: 50,
+              }}
+            />
+          </VStack>
+          <VStack
+            style={{
+              flex: 1,
+              paddingHorizontal: 16,
+              gap: 4,
+            }}
+          >
+            <Text variant={'heading4_bold'} fontColor="white">
+              Costa Coffee
+            </Text>
+            <Text variant={'label2_medium'} fontColor="#979797">
+              You paid $250
+            </Text>
+          </VStack>
+          <VStack
+            style={{
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
+              gap: 4,
+            }}
+          >
+            <Text variant={'label2_medium'} fontColor="#979797">
+              Dec, 09
+            </Text>
+            <Text variant={'heading4_bold'} fontColor="#ACE4D6">
+              $125.00
+            </Text>
           </VStack>
         </HStack>
       </VStack>
@@ -74,5 +152,8 @@ const styles = StyleSheet.create({
   },
   paddingT10: {
     paddingTop: 10,
+  },
+  backgroundTransparent: {
+    backgroundColor: 'transparent',
   },
 });
