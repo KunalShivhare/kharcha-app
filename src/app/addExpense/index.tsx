@@ -19,8 +19,16 @@ import {
 import { SPLIT_TYPE, useAddExpense } from './hooks';
 
 const AddExpense = () => {
-  const { amount, description, setAmount, setDescription, splitType, setSplitType, amountRef } =
-    useAddExpense();
+  const {
+    amount,
+    description,
+    setAmount,
+    setDescription,
+    splitType,
+    setSplitType,
+    amountRef,
+    onAddExpense,
+  } = useAddExpense();
 
   return (
     <View style={styles.container}>
@@ -102,7 +110,7 @@ const AddExpense = () => {
         </>
       </ScrollView>
       <View style={styles.padding16}>
-        <TouchableOpacity style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={onAddExpense}>
           <Text style={styles.title}>Done</Text>
         </TouchableOpacity>
       </View>

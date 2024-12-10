@@ -52,6 +52,7 @@ const COLORS = {
   blue20: '#BDDCFF',
 
   orange: '#ec5601',
+  darkBackground: '#101010',
 };
 
 export { COLORS };

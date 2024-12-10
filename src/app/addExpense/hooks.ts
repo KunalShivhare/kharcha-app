@@ -1,3 +1,5 @@
+import { useExpenseStore } from '@/src/stores/expenseStore/expenseStore';
+import { distributeEqualPrice } from '@/src/utilities/expenseUtils';
 import { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 
@@ -12,7 +14,43 @@ const useAddExpense = () => {
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const [splitType, setSplitType] = useState<SPLIT_TYPE>(SPLIT_TYPE.EQUALLY);
   const amountRef = useRef<TextInput>(null);
-  return { description, setDescription, amount, setAmount, splitType, setSplitType, amountRef };
+
+  const { addExpense, expenses } = useExpenseStore();
+
+  const onAddExpense = async () => {
+    const personWithPrice = distributeEqualPrice(amount ?? 0, [
+      {
+        id: '1',
+        name: 'Kunal',
+      },
+      {
+        id: '2',
+        name: 'Parsediya',
+      },
+    ]);
+
+    const expense = {
+      description: description,
+      splitType: splitType,
+      amount: amount,
+      groupId: '123',
+      person: personWithPrice,
+      paidBy: '1',
+    };
+
+    await addExpense(expense);
+  };
+
+  return {
+    description,
+    setDescription,
+    amount,
+    setAmount,
+    splitType,
+    setSplitType,
+    amountRef,
+    onAddExpense,
+  };
 };
 
 export { useAddExpense };
