@@ -9,7 +9,7 @@ import AppTheme from '../themes/apptheme';
 import { TextToken, TextVariants } from './textToken';
 
 export interface TextProps extends NativeTextProps {
-  variant: TextToken;
+  variant?: TextToken;
   fontColor?: string;
   children?: React.ReactElement | string;
   style?: StyleProp<TextStyle>;

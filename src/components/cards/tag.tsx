@@ -1,14 +1,14 @@
 import React, { ReactChild } from 'react';
 import { useMemo } from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacityProps, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from '../themes/hooks';
 import { Text, TextToken } from '../text';
-import { TouchableOpacity } from '../touchables';
 import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
+import { getBGColor } from '@/src/utils/styles';
 
-interface ButtonProps extends TouchableOpacityProps {
-  type: 'Primary' | 'Secondary' | 'Dark';
+interface TagProps {
+  type: 'lent' | 'borrowed' | 'settled';
   size: 'long' | 'short' | 'medium';
   title: string;
   width?: string;
@@ -20,62 +20,54 @@ interface ButtonProps extends TouchableOpacityProps {
   onPress?: () => void;
   isDark?: boolean;
   textVariant?: TextToken;
+  showPointer?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const Tag: React.FC<TagProps> = ({
   type,
   size,
-  disabled,
-  onPress,
   title,
   width,
   customStyle,
   customRightElement,
-  accessibilityLabel,
-  isLoading,
   color,
   textVariant,
+  showPointer,
 }) => {
   const theme = useTheme();
 
-  const borderColor = useMemo<string>(() => COLORS.orange, [theme, type, disabled]);
+  const borderColor = useMemo<string>(() => getBGColor(type), [theme, type]);
 
-  const buttonStyle = useMemo<ViewStyle>(
+  const tagStyle = useMemo<ViewStyle>(
     () => ({
-      backgroundColor: type === 'Primary' ? COLORS.orange : COLORS.dark75,
+      backgroundColor: getBGColor(type),
       width,
       ...customStyle,
       borderColor,
       borderWidth: 1,
     }),
-    [theme, type, disabled, width, customStyle]
+    [theme, type, , width, customStyle]
   );
+
   const textColor = useMemo<string>(
-    () => (type === 'Primary' ? COLORS.light100 : COLORS.orange),
-    [theme, type, disabled]
+    () => (type === 'lent' ? COLORS.light100 : COLORS.orange),
+    [theme, type]
   );
 
   return (
-    <TouchableOpacity
-      accessibilityLabel={accessibilityLabel}
-      activeOpacity={0.75}
-      disabled={disabled || isLoading}
-      style={[styles.base, styles[size], buttonStyle]}
-      onPress={() => onPress && onPress()}
-    >
-      {isLoading ? (
-        <ActivityIndicator size={'small'} color={color ?? textColor} />
-      ) : (
+    <View style={[styles.base, styles[size], tagStyle]}>
+      <View style={styles.textContainer}>
+        {showPointer ? <View style={styles.pointer} /> : null}
         <Text
           variant={textVariant ?? 'label2_semibold'}
           fontColor={color ?? textColor}
-          style={styles.cta}
+          style={styles.tag}
         >
           {title ?? ''}
         </Text>
-      )}
+      </View>
       {customRightElement}
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -96,6 +88,13 @@ const styles = StyleSheet.create({
   short: {
     width: resize(152),
   },
-  cta: { lineHeight: 24 },
+  tag: { lineHeight: 24, textTransform: 'capitalize' },
+  textContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: resize(4),
+  },
+  pointer: { height: resize(4), width: resize(4), backgroundColor: 'white', borderRadius: 50 },
 });
-export default Button;
+export default Tag;
