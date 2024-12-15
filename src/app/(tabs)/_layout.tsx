@@ -1,10 +1,9 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { Redirect, Tabs } from 'expo-router';
-
 import { ThemeProvider } from '@react-navigation/native';
+import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../providers/AuthProvider';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar, StyleSheet } from 'react-native';
+import { resize } from '@/src/utils/deviceDimentions';
 
 export default function RootLayout() {
   const { isAuthenticated } = useAuth();
@@ -27,15 +26,28 @@ export default function RootLayout() {
       }}
     >
       <StatusBar backgroundColor="#212325" />
-      <Tabs>
+      <Tabs
+        screenOptions={{
+          tabBarStyle: {
+            height: resize(60),
+            borderTopRightRadius: 28,
+            borderTopLeftRadius: 28,
+            justifyContent: 'center',
+            paddingBottom: 8,
+          },
+          tabBarLabelStyle: {
+            marginTop: -6,
+            fontSize: 12,
+          },
+          lazy: false,
+        }}
+      >
         <Tabs.Screen
           name="home/index"
           options={{
             title: 'Home',
             headerShown: false,
-            tabBarIcon: ({ size, color }) => (
-              <MaterialIcons name="home" size={size} color={color} />
-            ),
+            tabBarIcon: ({ size, color }) => <MaterialIcons name="home" size={32} color={color} />,
           }}
         />
         <Tabs.Screen
@@ -44,7 +56,29 @@ export default function RootLayout() {
             title: 'Groups',
             headerShown: false,
             tabBarIcon: ({ size, color }) => (
-              <MaterialIcons name="groups" size={size} color={color} />
+              <MaterialIcons name="groups" size={32} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="add/index"
+          options={{
+            title: '',
+            tabBarIcon: () => null, // Hide default icon
+            tabBarButton: (props) => (
+              <TouchableOpacity style={styles.floatingButton} onPress={props.onPress}>
+                <MaterialIcons name="add" size={32} color="white" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="activity/index"
+          options={{
+            title: 'Activity',
+            headerShown: false,
+            tabBarIcon: ({ size, color }) => (
+              <MaterialIcons name="auto-graph" size={32} color={color} />
             ),
           }}
         />
@@ -54,7 +88,7 @@ export default function RootLayout() {
             title: 'Friends',
             headerShown: false,
             tabBarIcon: ({ size, color }) => (
-              <MaterialIcons name={'person'} size={size} color={color} />
+              <MaterialIcons name={'person'} size={32} color={color} />
             ),
           }}
         />
@@ -62,3 +96,23 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  floatingButton: {
+    width: 64,
+    height: 64,
+    backgroundColor: '#00C39A',
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -30, // Move button above the tab bar
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+});
