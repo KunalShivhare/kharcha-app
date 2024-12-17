@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
   },
   progress: {
     height: '100%',
-    backgroundColor: '#1bc29f',
+    backgroundColor: '#1bc29fFF',
+    borderRadius: 10,
   },
 });
 

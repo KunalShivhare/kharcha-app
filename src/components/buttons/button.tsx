@@ -1,6 +1,12 @@
 import React, { ReactChild } from 'react';
 import { useMemo } from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacityProps, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TextStyle,
+  TouchableOpacityProps,
+  ViewStyle,
+} from 'react-native';
 import { useTheme } from '../themes/hooks';
 import { Text, TextToken } from '../text';
 import { TouchableOpacity } from '../touchables';
@@ -20,6 +26,7 @@ interface ButtonProps extends TouchableOpacityProps {
   onPress?: () => void;
   isDark?: boolean;
   textVariant?: TextToken;
+  textStyle?: TextStyle;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -35,6 +42,7 @@ const Button: React.FC<ButtonProps> = ({
   isLoading,
   color,
   textVariant,
+  textStyle,
 }) => {
   const theme = useTheme();
 
@@ -44,9 +52,9 @@ const Button: React.FC<ButtonProps> = ({
     () => ({
       backgroundColor: type === 'Primary' ? COLORS.orange : COLORS.dark75,
       width,
-      ...customStyle,
       borderColor,
       borderWidth: 1,
+      ...customStyle,
     }),
     [theme, type, disabled, width, customStyle]
   );
@@ -69,7 +77,7 @@ const Button: React.FC<ButtonProps> = ({
         <Text
           variant={textVariant ?? 'label2_semibold'}
           fontColor={color ?? textColor}
-          style={styles.cta}
+          style={[styles.cta, textStyle]}
         >
           {title ?? ''}
         </Text>
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     height: 36,
     justifyContent: 'center',
-    marginVertical: 10,
+    // marginVertical: 10,
     paddingHorizontal: 20,
     paddingVertical: 4,
   },
