@@ -7,25 +7,6 @@ import { Alert } from 'react-native';
 const useGroups = () => {
   const owed = 102.28;
   const own = 76.84;
-  const [groupName, setGroupName] = useState<string>('');
-  const [selectedGroupType, setGroupType] = useState<string>('');
-  const { createGroup } = useGroupStore();
-
-  const onDonePress = () => {
-    if (groupName === '') {
-      Alert.alert('Group name is must!');
-      return;
-    }
-    const group = {
-      id: faker.database.mongodbObjectId(),
-      name: groupName,
-      type: groupType,
-      avatar: faker.image.avatar(),
-    };
-
-    createGroup(group);
-    router.back();
-  };
   const groupTypes = [
     {
       name: 'Trip',
@@ -40,6 +21,31 @@ const useGroups = () => {
       name: 'Other',
     },
   ];
+  const [groupName, setGroupName] = useState<string>('');
+  const [selectedGroupType, setGroupType] = useState<string>('');
+  const { createGroup } = useGroupStore();
+
+  const reset = () => {
+    setGroupName('');
+    setGroupType('');
+  };
+
+  const onDonePress = () => {
+    if (groupName === '') {
+      Alert.alert('Group name is must!');
+      return;
+    }
+    const group = {
+      id: faker.database.mongodbObjectId(),
+      name: groupName,
+      type: selectedGroupType,
+      avatar: faker.image.avatar(),
+    };
+
+    createGroup(group);
+    reset();
+    router.back();
+  };
 
   const onSettleUp = () => {
     console.log('Settle up');

@@ -44,9 +44,7 @@ const Layout = StyleSheet.create({
     flexDirection: 'row',
   },
   spaceBetween: {
-    display: 'flex',
     justifyContent: 'space-between',
-    flexDirection: 'row',
   },
   centering: {
     justifyContent: 'center',
@@ -280,6 +278,9 @@ const padding = StyleSheet.create({
   },
   l12: {
     paddingLeft: 12,
+  },
+  r2: {
+    paddingRight: 2,
   },
   r6: {
     paddingRight: 6,
