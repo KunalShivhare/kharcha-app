@@ -15,29 +15,26 @@ const SummaryCard = ({ owed, own, onViewDetails, onBalance, onSettleUp }) => {
       <HStack>
         <VStack style={styles.groupInfoContainer}>
           <HStack style={styles.justifyBetween}>
-            <VStack>
+            <VStack
+              style={{
+                gap: 8,
+              }}
+            >
               <Text variant={'label3_regular'} fontColor="#F3f3f3BA" style={styles.texWhite}>
                 Total Owed
               </Text>
-              <Text
-                variant={'heading3_regular'}
-                fontColor="#1ccca7"
-                style={styles.paddingT10}
-              >{`+$${owed}`}</Text>
+              <Text variant={'heading4_regular'} fontColor="#1ccca7FF">{`+$${owed}`}</Text>
             </VStack>
             <VStack
               style={{
                 alignItems: 'flex-end',
+                gap: 8,
               }}
             >
               <Text variant={'label3_regular'} fontColor="#F3f3f3BA" style={styles.texWhite}>
                 Total Owe
               </Text>
-              <Text
-                variant={'heading3_regular'}
-                fontColor={'#fb9c66'}
-                style={[styles.texWhite, styles.paddingT10]}
-              >{`-$${own}`}</Text>
+              <Text variant={'heading4_regular'} fontColor={'#fb9c66'}>{`-$${own}`}</Text>
             </VStack>
           </HStack>
           <ProgressBar

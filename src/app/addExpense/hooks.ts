@@ -1,4 +1,4 @@
-import { useExpenseStore } from '@/src/stores/expenseStore/expenseStore';
+import { useExpenseStore } from '@/src/stores/expenseStore';
 import { distributeEqualPrice } from '@/src/utilities/expenseUtils';
 import { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
@@ -26,6 +26,10 @@ const useAddExpense = () => {
       {
         id: '2',
         name: 'Parsediya',
+      },
+      {
+        id: '3',
+        name: 'Aditya',
       },
     ]);
 

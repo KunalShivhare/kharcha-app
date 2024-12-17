@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { Redirect, Tabs } from 'expo-router';
+import { Redirect, Tabs, usePathname } from 'expo-router';
+
 import { ThemeProvider } from '@react-navigation/native';
 import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../providers/AuthProvider';
@@ -7,6 +8,7 @@ import { resize } from '@/src/utils/deviceDimentions';
 
 export default function RootLayout() {
   const { isAuthenticated } = useAuth();
+  const pathName = usePathname();
 
   if (!isAuthenticated) {
     return <Redirect href={'/onboarding'} />;
@@ -34,6 +36,7 @@ export default function RootLayout() {
             borderTopLeftRadius: 28,
             justifyContent: 'center',
             paddingBottom: 8,
+            display: pathName === '/groups/createGroup' ? 'none' : 'flex',
           },
           tabBarLabelStyle: {
             marginTop: -6,
@@ -80,6 +83,13 @@ export default function RootLayout() {
             tabBarIcon: ({ size, color }) => (
               <MaterialIcons name="auto-graph" size={32} color={color} />
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="groups/createGroup"
+          options={{
+            href: null,
+            headerShown: false,
           }}
         />
         <Tabs.Screen

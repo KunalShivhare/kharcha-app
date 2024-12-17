@@ -1,10 +1,10 @@
-import { Button, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAuth } from '../../../providers/AuthProvider';
-import { Link, router } from 'expo-router';
-import { COLORS } from '@/src/providers/theme.style';
+import GroupList from '@/src/components/groups/groupList';
 import Header from '@/src/components/header/header';
 import SummaryCard from '@/src/components/home/summaryCard';
+import { COLORS } from '@/src/providers/theme.style';
+import { router } from 'expo-router';
+import { StatusBar, StyleSheet, View } from 'react-native';
+import { useAuth } from '../../../providers/AuthProvider';
 
 const Home = () => {
   const { signOut } = useAuth();
@@ -26,6 +26,7 @@ const Home = () => {
         onViewDetails={undefined}
         onSettleUp={undefined}
       />
+      <GroupList />
       {/* <Button title="Add Expense" onPress={onAddExpense}></Button> */}
       {/* <Button title="Open modal" onPress={onModal}></Button> */}
     </View>

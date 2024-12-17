@@ -16,11 +16,11 @@ const InputField: React.FC<InputFieldProps> = ({ ref, containerStyle, ...textInp
       <TextInput
         ref={ref ?? inputRef}
         value={input}
-        // @ts-ignore
-        style={styles.textInput(Boolean(input.length))}
         onChangeText={(input) => setInput(String(input))}
         placeholder="Type something"
         placeholderTextColor={'#91919F'}
+        // @ts-ignore
+        style={styles.textInput(Boolean(input.length))}
         {...textInputProps}
       />
     </View>

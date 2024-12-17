@@ -522,6 +522,39 @@ const margin = StyleSheet.create({
   },
 });
 
+const gap = StyleSheet.create({
+  g2: {
+    gap: 2,
+  },
+  g4: {
+    gap: 4,
+  },
+  g6: {
+    gap: 6,
+  },
+  g8: {
+    gap: 8,
+  },
+  g10: {
+    gap: 10,
+  },
+  g12: {
+    gap: 12,
+  },
+  g14: {
+    gap: 14,
+  },
+  g16: {
+    gap: 16,
+  },
+  g18: {
+    gap: 18,
+  },
+  g20: {
+    gap: 20,
+  },
+});
+
 const border = StyleSheet.create({
   b4: {
     borderRadius: 4,
@@ -560,7 +593,19 @@ const GLOBAL = {
   FONT_SIZE,
   padding,
   margin,
+  gap,
 };
 
 export default GLOBAL;
-export { Layout, Shadow, LINE_HEIGHT, FONT_SIZE, padding, margin, border, borderWidth, textStyle };
+export {
+  Layout,
+  Shadow,
+  LINE_HEIGHT,
+  FONT_SIZE,
+  padding,
+  margin,
+  border,
+  borderWidth,
+  textStyle,
+  gap,
+};
