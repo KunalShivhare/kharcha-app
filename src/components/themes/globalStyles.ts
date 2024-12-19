@@ -44,9 +44,7 @@ const Layout = StyleSheet.create({
     flexDirection: 'row',
   },
   spaceBetween: {
-    display: 'flex',
     justifyContent: 'space-between',
-    flexDirection: 'row',
   },
   centering: {
     justifyContent: 'center',
@@ -263,6 +261,9 @@ const padding = StyleSheet.create({
   b14: {
     paddingBottom: 14,
   },
+  b24: {
+    paddingBottom: 24,
+  },
   b50: {
     paddingBottom: 50,
   },
@@ -280,6 +281,9 @@ const padding = StyleSheet.create({
   },
   l12: {
     paddingLeft: 12,
+  },
+  r2: {
+    paddingRight: 2,
   },
   r6: {
     paddingRight: 6,
@@ -522,6 +526,39 @@ const margin = StyleSheet.create({
   },
 });
 
+const gap = StyleSheet.create({
+  g2: {
+    gap: 2,
+  },
+  g4: {
+    gap: 4,
+  },
+  g6: {
+    gap: 6,
+  },
+  g8: {
+    gap: 8,
+  },
+  g10: {
+    gap: 10,
+  },
+  g12: {
+    gap: 12,
+  },
+  g14: {
+    gap: 14,
+  },
+  g16: {
+    gap: 16,
+  },
+  g18: {
+    gap: 18,
+  },
+  g20: {
+    gap: 20,
+  },
+});
+
 const border = StyleSheet.create({
   b4: {
     borderRadius: 4,
@@ -560,7 +597,19 @@ const GLOBAL = {
   FONT_SIZE,
   padding,
   margin,
+  gap,
 };
 
 export default GLOBAL;
-export { Layout, Shadow, LINE_HEIGHT, FONT_SIZE, padding, margin, border, borderWidth, textStyle };
+export {
+  Layout,
+  Shadow,
+  LINE_HEIGHT,
+  FONT_SIZE,
+  padding,
+  margin,
+  border,
+  borderWidth,
+  textStyle,
+  gap,
+};
