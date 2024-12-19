@@ -1,4 +1,4 @@
-import { Image, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet } from 'react-native';
 import React from 'react';
 import { faker } from '@faker-js/faker/.';
 import { HStack } from '../customUI/HStack';
@@ -12,11 +12,13 @@ import { useGroupStore } from '@/src/stores/groupStore';
 import { gap, Layout, padding } from '../themes/globalStyles';
 import { useShallow } from 'zustand/react/shallow';
 import LottieView from 'lottie-react-native';
+import { useGroups } from '@/src/app/(tabs)/groups/hooks';
 
 const GroupList = ({}) => {
   const [groups, groupLength] = useGroupStore(
     useShallow((state) => [state.groups, state.groups.length])
   );
+  const { onPressGroupCard } = useGroups();
   const emptyUrl = require('../../assets/lottie/empty.json');
 
   const onAdd = () => {
@@ -43,23 +45,25 @@ const GroupList = ({}) => {
           </HStack>
           {groups?.map((group: any) => {
             return (
-              <HStack style={padding.t16} key={group?.id}>
-                <VStack>
-                  <Image
-                    source={{ uri: group?.avatar ?? faker.image.avatar() }}
-                    style={{ height: 80, width: 80, resizeMode: 'contain', borderRadius: 15 }}
-                  />
-                </VStack>
-                <VStack style={[padding.h16, Layout.justifyCenter, gap.g10]}>
-                  <Text variant={'heading4_bold'} fontColor="white">
-                    {group?.name}
-                  </Text>
+              <Pressable key={group?.id} onPress={() => onPressGroupCard(group)}>
+                <HStack style={padding.t16}>
+                  <VStack>
+                    <Image
+                      source={{ uri: group?.avatar ?? faker.image.avatar() }}
+                      style={{ height: 80, width: 80, resizeMode: 'contain', borderRadius: 15 }}
+                    />
+                  </VStack>
+                  <VStack style={[padding.h16, Layout.justifyCenter, gap.g10]}>
+                    <Text variant={'heading4_bold'} fontColor="white">
+                      {group?.name}
+                    </Text>
 
-                  <Text variant={'label2_regular'} fontColor={'#ACE4D6'}>
-                    {}
-                  </Text>
-                </VStack>
-              </HStack>
+                    <Text variant={'label2_regular'} fontColor={'#ACE4D6'}>
+                      {}
+                    </Text>
+                  </VStack>
+                </HStack>
+              </Pressable>
             );
           })}
         </VStack>

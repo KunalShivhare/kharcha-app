@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import { Redirect, Tabs, usePathname } from 'expo-router';
+import { Redirect, router, Tabs, usePathname } from 'expo-router';
 
 import { ThemeProvider } from '@react-navigation/native';
 import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
@@ -42,7 +42,7 @@ export default function RootLayout() {
             marginTop: -6,
             fontSize: 12,
           },
-          lazy: false,
+          lazy: true,
         }}
       >
         <Tabs.Screen
@@ -54,22 +54,33 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
-          name="groups/index"
+          name="friends/index"
           options={{
-            title: 'Groups',
+            title: 'Friends',
             headerShown: false,
             tabBarIcon: ({ size, color }) => (
-              <MaterialIcons name="groups" size={32} color={color} />
+              <MaterialIcons name={'person'} size={32} color={color} />
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="groups/groupDetails"
+          options={{
+            href: null,
+            headerShown: false,
           }}
         />
         <Tabs.Screen
           name="add/index"
           options={{
+            // href: '/addExpense',
             title: '',
             tabBarIcon: () => null, // Hide default icon
             tabBarButton: (props) => (
-              <TouchableOpacity style={styles.floatingButton} onPress={props.onPress}>
+              <TouchableOpacity
+                style={styles.floatingButton}
+                onPress={() => router.push('/addExpense')}
+              >
                 <MaterialIcons name="add" size={32} color="white" />
               </TouchableOpacity>
             ),
@@ -90,16 +101,6 @@ export default function RootLayout() {
           options={{
             href: null,
             headerShown: false,
-          }}
-        />
-        <Tabs.Screen
-          name="friends/index"
-          options={{
-            title: 'Friends',
-            headerShown: false,
-            tabBarIcon: ({ size, color }) => (
-              <MaterialIcons name={'person'} size={32} color={color} />
-            ),
           }}
         />
       </Tabs>

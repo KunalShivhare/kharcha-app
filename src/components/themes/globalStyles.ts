@@ -261,6 +261,9 @@ const padding = StyleSheet.create({
   b14: {
     paddingBottom: 14,
   },
+  b24: {
+    paddingBottom: 24,
+  },
   b50: {
     paddingBottom: 50,
   },

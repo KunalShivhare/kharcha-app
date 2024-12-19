@@ -6,8 +6,6 @@ export function distributeEqualPrice(
     amount?: number;
   }>
 ) {
-  if (amount === 0) return;
-
   const totalPersons = persons.length;
   const baseShare = Math.floor((amount / totalPersons) * 100) / 100;
   let remainder = Math.round((amount - baseShare * totalPersons) * 100); // Convert remainder to cents for easier distribution
@@ -20,5 +18,6 @@ export function distributeEqualPrice(
       remainder--;
     }
   });
-  return persons;
+  const totalLent = amount - baseShare;
+  return { persons, totalLent };
 }

@@ -1,10 +1,12 @@
+import { useExpenseStore } from '@/src/stores/expenseStore';
 import { useGroupStore } from '@/src/stores/groupStore';
 import { faker } from '@faker-js/faker/.';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 
-const useGroups = () => {
+const useGroups = (props?: any) => {
+  const groupId = props?.groupId ?? '';
   const owed = 102.28;
   const own = 76.84;
   const groupTypes = [
@@ -24,6 +26,20 @@ const useGroups = () => {
   const [groupName, setGroupName] = useState<string>('');
   const [selectedGroupType, setGroupType] = useState<string>('');
   const { createGroup } = useGroupStore();
+  const groupData = useGroupStore((state) => state.groups.find((item) => item?.id === groupId));
+  const expenses = useExpenseStore((state) => state.expenses);
+
+  const expenseData = useMemo(
+    () => expenses.filter((item) => item?.groupId === groupId),
+    [expenses, groupId]
+  );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (groupData) {
+      setLoading(false);
+    }
+  }, [groupData]);
 
   const reset = () => {
     setGroupName('');
@@ -59,6 +75,24 @@ const useGroups = () => {
     console.log('Balance');
   };
 
+  const onPressGroupCard = (group: { avatar: string; id: string; name: string; type: string }) => {
+    router.push({
+      pathname: '/groups/groupDetails',
+      params: {
+        groupId: group?.id,
+      },
+    });
+  };
+
+  const onAdd = (groupId: string) => {
+    router.push({
+      pathname: '/addExpense',
+      params: {
+        groupId: groupId,
+      },
+    });
+  };
+
   return {
     owed,
     own,
@@ -71,6 +105,10 @@ const useGroups = () => {
     selectedGroupType,
     setGroupType,
     onDonePress,
+    onPressGroupCard,
+    onAdd,
+    groupData,
+    expenseData,
   };
 };
 

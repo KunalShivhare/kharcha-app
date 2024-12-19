@@ -17,8 +17,10 @@ import {
   View,
 } from 'react-native';
 import { SPLIT_TYPE, useAddExpense } from './hooks';
+import { useLocalSearchParams } from 'expo-router';
 
 const AddExpense = () => {
+  const { groupId } = useLocalSearchParams();
   const {
     amount,
     description,
@@ -28,7 +30,9 @@ const AddExpense = () => {
     setSplitType,
     amountRef,
     onAddExpense,
-  } = useAddExpense();
+  } = useAddExpense({
+    groupId: groupId.toString() ?? '',
+  });
 
   return (
     <View style={styles.container}>
@@ -170,6 +174,7 @@ const styles = StyleSheet.create({
   descriptionTextInput: {
     borderWidth: 0,
     paddingVertical: 10,
+    color: 'white',
   },
   textWhite: {
     color: 'white',
