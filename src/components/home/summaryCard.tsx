@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   groupInfoContainer: {
-    padding: 10,
+    paddingVertical: 10,
     flex: 1,
   },
   justifyBetween: {

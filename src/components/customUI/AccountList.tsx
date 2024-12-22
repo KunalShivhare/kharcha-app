@@ -30,12 +30,12 @@ const AccountList = ({ featuresList }: FeaturesListProps) => {
   const renderSubFeature = ({ item }: { item: SubFeature }) => (
     <HStack>
       <View style={[styles.center, styles.iconContainer]}>
-        {typeof item.icon === 'string' ? <Text>{item.icon}</Text> : item.icon}
+        {typeof item?.icon === 'string' ? <Text>{item?.icon}</Text> : item?.icon}
       </View>
       <HStack style={[styles.center, styles.subList]}>
         <View>
-          <Text style={styles.font}>{item.heading}</Text>
-          <Text style={styles.subHeading}>{item.subHeading}</Text>
+          <Text style={styles.font}>{item?.heading}</Text>
+          <Text style={styles.subHeading}>{item?.subHeading}</Text>
         </View>
         <AntDesign style={styles.alignSelf} name="right" size={16} color={COLORS.primary} />
       </HStack>
@@ -43,11 +43,11 @@ const AccountList = ({ featuresList }: FeaturesListProps) => {
   );
   const renderItem = ({ item }: { item: Feature }) => {
     return (
-      <VStack>
-        <Text style={[styles.font, styles.featureName]}>{item.name}</Text>
+      <VStack style={{ paddingVertical: 8 }}>
+        <Text style={[styles.font, styles.featureName]}>{item?.name}</Text>
         <FlatList
-          data={item.subList}
-          keyExtractor={(_, subIndex) => `${item.name}-${subIndex}`}
+          data={item?.subList}
+          keyExtractor={(_, subIndex) => `${item?.name}-${subIndex}`}
           renderItem={renderSubFeature}
         />
       </VStack>
