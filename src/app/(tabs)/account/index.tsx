@@ -9,7 +9,7 @@ import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { faker } from '@faker-js/faker/.';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 const Account = () => {
   const featuresList = [
@@ -26,6 +26,16 @@ const Account = () => {
           subHeading: 'Unlock the premium with 25% discount',
           icon: <Ionicons name="diamond" size={28} color={COLORS.primary} />,
         },
+        {
+          heading: 'Logout',
+          subHeading: 'Logout from the app',
+          icon: <Ionicons name="qr-code" size={28} color={COLORS.primary} />,
+        },
+        {
+          heading: 'Get Premium',
+          subHeading: 'Unlock the premium with 25% discount',
+          icon: <Ionicons name="diamond" size={28} color={COLORS.primary} />,
+        },
       ],
     },
     {
@@ -43,22 +53,39 @@ const Account = () => {
         },
       ],
     },
+    {
+      name: 'Application',
+      subList: [
+        {
+          heading: 'Logout',
+          subHeading: 'Logout from the app',
+          icon: <Ionicons name="qr-code" size={28} color={COLORS.primary} />,
+        },
+        {
+          heading: 'Get Premium',
+          subHeading: 'Unlock the premium with 25% discount',
+          icon: <Ionicons name="diamond" size={28} color={COLORS.primary} />,
+        },
+      ],
+    },
   ];
   return (
     <View style={styles.flex1}>
       <Header title="Account" />
-      <VStack style={styles.container}>
-        <HStack style={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <AvatarWithLabel
-            uri={faker.image.avatar()}
-            label="Rishabh Parsediya"
-            subLabel="parsediyarishabh@gmail.com"
-          />
-          <Feather name="edit" size={24} color={COLORS.primary} />
-        </HStack>
-        <Separator />
-        <AccountList featuresList={featuresList} />
-      </VStack>
+      <ScrollView>
+        <VStack style={styles.container}>
+          <HStack style={styles.labelContainer}>
+            <AvatarWithLabel
+              uri={faker.image.avatar()}
+              label="Rishabh Parsediya"
+              subLabel="parsediyarishabh@gmail.com"
+            />
+            <Feather name="edit" size={24} color={COLORS.primary} />
+          </HStack>
+          <Separator />
+          <AccountList featuresList={featuresList} />
+        </VStack>
+      </ScrollView>
     </View>
   );
 };
@@ -67,6 +94,7 @@ export default Account;
 
 const styles = StyleSheet.create({
   container: { paddingHorizontal: 16 },
+  labelContainer: { justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   flex1: {
     flex: 1,
   },
