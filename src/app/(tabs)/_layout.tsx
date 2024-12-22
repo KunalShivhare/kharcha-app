@@ -59,7 +59,7 @@ export default function RootLayout() {
             title: 'Friends',
             headerShown: false,
             tabBarIcon: ({ size, color }) => (
-              <MaterialIcons name={'person'} size={32} color={color} />
+              <MaterialIcons name={'people'} size={32} color={color} />
             ),
           }}
         />
@@ -108,6 +108,16 @@ export default function RootLayout() {
           options={{
             href: null,
             headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="account/index"
+          options={{
+            title: 'Account',
+            headerShown: false,
+            tabBarIcon: ({ size, color }) => (
+              <MaterialIcons name="person" size={32} color={color} />
+            ),
           }}
         />
       </Tabs>
