@@ -31,7 +31,7 @@ const AddExpense = () => {
     amountRef,
     onAddExpense,
   } = useAddExpense({
-    groupId: groupId.toString() ?? '',
+    groupId: groupId?.toString() ?? '',
   });
 
   return (
