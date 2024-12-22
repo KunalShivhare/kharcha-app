@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import AppTheme from '../themes/apptheme';
 import { TextToken, TextVariants } from './textToken';
+import { COLORS } from '@/src/providers/theme.style';
 
 export interface TextProps extends NativeTextProps {
   variant?: TextToken;
@@ -24,7 +25,7 @@ const TextComponent: React.FC<TextProps> = (props) => {
     TextVariants[variant],
     style,
     {
-      color: fontColor ?? theme.colors.primaryText,
+      color: fontColor ?? COLORS.light100,
     },
     !!textAlign && { textAlign },
   ];

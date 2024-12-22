@@ -37,8 +37,9 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
       onPress={onPress}
       style={[
         styles.button,
-        { width: size, height: size, backgroundColor, ...positionStyle.position },
+        { minWidth: size, backgroundColor, ...positionStyle.position },
         style,
+        { flexGrow: 1 },
       ]}
       activeOpacity={1}
     >
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+    padding: 16,
   },
   innerButton: {
     justifyContent: 'center',

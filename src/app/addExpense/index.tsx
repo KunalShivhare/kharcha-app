@@ -31,7 +31,7 @@ const AddExpense = () => {
     amountRef,
     onAddExpense,
   } = useAddExpense({
-    groupId: groupId.toString() ?? '',
+    groupId: groupId?.toString() ?? '',
   });
 
   return (
@@ -69,7 +69,7 @@ const AddExpense = () => {
           <VStack style={styles.amountContainer}>
             <Text style={styles.amountText}>Amount</Text>
             <InputField
-              ref={amountRef}
+              inputRef={amountRef}
               placeholder="Enter amount"
               style={styles.amountTextInput}
               value={amount ? String(amount) : ''}
@@ -86,6 +86,7 @@ const AddExpense = () => {
                     { backgroundColor: item === splitType ? '#101010' : undefined },
                   ]}
                   onPress={() => setSplitType(item)}
+                  key={item}
                 >
                   <Text
                     style={[

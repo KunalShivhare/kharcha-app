@@ -3,9 +3,11 @@ import React from 'react';
 import { resize } from '../../../utils/deviceDimentions';
 import { faker } from '@faker-js/faker/.';
 import { StatusBar } from 'expo-status-bar';
+import FloatingButton from '@/src/components/buttons/floatingButton';
+import { router } from 'expo-router';
 
 const Friends = () => {
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item, index }: { item: any; index: any }) => {
     const type = faker.helpers.arrayElement(['owe', 'owed']);
     return (
       <View style={styles.friendCardContainer}>
@@ -55,10 +57,22 @@ const Friends = () => {
           Friends
         </Text>
       </View>
+
       <FlatList
         data={Array.from({ length: 20 })}
         keyExtractor={(item, index) => String(index)}
         renderItem={renderItem}
+      />
+      <FloatingButton
+        text="+ Add Friend"
+        textStyle={{
+          fontSize: 14,
+          fontWeight: 'bold',
+          color: '#fff',
+        }}
+        onPress={() => {
+          router.push('/contacts/contactList');
+        }}
       />
     </View>
   );

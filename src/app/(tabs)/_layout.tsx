@@ -103,6 +103,13 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+        <Tabs.Screen
+          name="contacts/contactList"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
       </Tabs>
     </ThemeProvider>
   );
