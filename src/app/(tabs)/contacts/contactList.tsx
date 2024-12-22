@@ -1,18 +1,23 @@
-import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import React, { useCallback, useMemo } from 'react';
 import Header from '@/src/components/header/header';
 import { VStack } from '@/src/components/customUI/VStack';
 import { Text } from '@/src/components/text';
 import { gap, Layout, padding } from '@/src/components/themes/globalStyles';
 import { HStack } from '@/src/components/customUI/HStack';
-import * as Contacts from 'expo-contacts';
-import { faker } from '@faker-js/faker/.';
-import { useContactStore } from '@/src/stores/contactStore';
 import { useContacts } from './hooks';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const ContactList = () => {
-  const { contacts, selectedContacts, onSelectContact } = useContacts();
+  const { contacts, selectedContacts, onSelectContact, loadingContact } = useContacts();
 
   const contactCard = useCallback(
     ({ item: contact, index }: { item: any; index: number }) => {
@@ -46,20 +51,34 @@ const ContactList = () => {
   const memoizedContactCard = useMemo(() => contactCard, [contactCard]);
 
   return (
-    <View>
+    <View style={[Layout.container]}>
       <Header title="Contacts" />
-      <VStack style={[padding.h16, padding.v12]}>
-        <Text>From your contacts</Text>
-        <FlatList
-          data={contacts}
-          contentContainerStyle={{ paddingTop: 16 }}
-          keyExtractor={(item) => item.phoneNumber}
-          renderItem={memoizedContactCard}
-          initialNumToRender={10}
-          maxToRenderPerBatch={50}
-          windowSize={9}
-        />
-      </VStack>
+      {!loadingContact && (
+        <VStack style={[padding.h16, padding.v12]}>
+          <Text>From your contacts</Text>
+          <FlatList
+            data={contacts}
+            contentContainerStyle={{ paddingTop: 16 }}
+            keyExtractor={(item) => item.phoneNumber}
+            renderItem={memoizedContactCard}
+            initialNumToRender={10}
+            maxToRenderPerBatch={50}
+            windowSize={9}
+          />
+        </VStack>
+      )}
+      {loadingContact && (
+        <ScrollView
+          contentContainerStyle={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ActivityIndicator size="large" color="white" />
+          <Text variant="label2_semibold">Loading contacts...</Text>
+        </ScrollView>
+      )}
     </View>
   );
 };
