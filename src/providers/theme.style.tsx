@@ -8,6 +8,7 @@ const COLORS = {
   dark75: '#161719',
   dark50: '#212325',
   dark25: '#7A7E80',
+  dark10: '#484b4d',
 
   //LIGHT
   light100: '#FFFFFF',
