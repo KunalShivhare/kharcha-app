@@ -64,7 +64,7 @@ const SelectedContactList = () => {
         </VStack>
         <View style={[padding.v16, padding.h16]}>
           <TouchableOpacity style={styles.buttonContainer}>
-            <Text style={styles.title}>Next</Text>
+            <Text style={styles.title}>Done</Text>
           </TouchableOpacity>
         </View>
       </>
