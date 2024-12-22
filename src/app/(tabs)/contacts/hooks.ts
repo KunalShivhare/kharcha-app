@@ -1,23 +1,68 @@
 import { useContactStore } from '@/src/stores/contactStore';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Contact } from './types';
+import { router } from 'expo-router';
+import useBackHandler from '@/src/utilities/useBackHandler';
 
 const useContacts = () => {
-  const [contacts, fetchContacts, loadingContact] = useContactStore(
-    useShallow((state) => [state.contacts, state.fetchContacts, state.loadingContact])
+  const [
+    contacts,
+    fetchContacts,
+    loadingContact,
+    selectedContacts,
+    selecteContact,
+    removeContact,
+    resetSelectedContacts,
+  ] = useContactStore(
+    useShallow((state) => [
+      state.contacts,
+      state.fetchContacts,
+      state.loadingContact,
+      state.selectedContacts,
+      state.selecteContact,
+      state.removeContact,
+      state.resetSelectedContacts,
+    ])
   );
 
-  const [selectedContacts, setSelectedContacts] = useState<Array<Contact>>([]);
-
   const onSelectContact = (contact: Contact) => {
-    setSelectedContacts([...selectedContacts, contact]);
+    const index = selectedContacts.findIndex(
+      (selectedContact) => selectedContact?.phoneNumber === contact?.phoneNumber
+    );
+    if (index === -1) {
+      selecteContact(contact);
+    } else {
+      removeContact(contact);
+    }
+  };
+
+  const isSelected = (contact: Contact) => {
+    return selectedContacts.some(
+      (selectedContact) => selectedContact?.phoneNumber === contact?.phoneNumber
+    );
+  };
+
+  const onGoBack = () => {
+    router.back();
+    resetSelectedContacts();
   };
 
   useEffect(() => {
     fetchContacts();
   }, []);
 
-  return { contacts, selectedContacts, onSelectContact, loadingContact };
+  useBackHandler(onGoBack);
+
+  return {
+    contacts,
+    selectedContacts,
+    onSelectContact,
+    loadingContact,
+    isSelected,
+    resetSelectedContacts,
+    onGoBack,
+    removeContact,
+  };
 };
 export { useContacts };

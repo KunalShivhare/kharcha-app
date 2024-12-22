@@ -1,15 +1,21 @@
 import { useEffect } from 'react';
 import { create } from 'zustand';
 import * as Contacts from 'expo-contacts';
+import { Contact } from '../app/(tabs)/contacts/types';
 
 type CONTACT_STORE = {
-  contacts: Array<any>;
+  contacts: Array<Contact>;
   fetchContacts: () => void;
   loadingContact: boolean;
+  selectedContacts: Array<Contact>;
+  selecteContact: (selectedContact: Contact) => void;
+  removeContact: (selectedContact: Contact) => void;
+  resetSelectedContacts: () => void;
 };
 
 const useContactStore = create<CONTACT_STORE>((set) => ({
   contacts: [],
+  selectedContacts: [],
   fetchContacts: async () => {
     const { status } = await Contacts.requestPermissionsAsync();
     if (status === 'granted') {
@@ -43,6 +49,19 @@ const useContactStore = create<CONTACT_STORE>((set) => ({
     }
   },
   loadingContact: true,
+  selecteContact: (selectedContact: Contact) => {
+    set((state) => ({ selectedContacts: [...state.selectedContacts, selectedContact] }));
+  },
+  removeContact: (selectedContact: Contact) => {
+    set((state) => ({
+      selectedContacts: state.selectedContacts.filter(
+        (contact) => contact.phoneNumber !== selectedContact.phoneNumber
+      ),
+    }));
+  },
+  resetSelectedContacts: () => {
+    set(() => ({ selectedContacts: [] }));
+  },
 }));
 
 export { useContactStore };
