@@ -6,6 +6,13 @@ import { StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../providers/AuthProvider';
 import { resize } from '@/src/utils/deviceDimentions';
 
+const hideTabBarRoutes = [
+  '/groups/createGroup',
+  '/addExpense',
+  '/contacts/contactList',
+  '/contacts/selectedContactList',
+];
+
 export default function RootLayout() {
   const { isAuthenticated } = useAuth();
   const pathName = usePathname();
@@ -36,7 +43,7 @@ export default function RootLayout() {
             borderTopLeftRadius: 28,
             justifyContent: 'center',
             paddingBottom: 8,
-            display: pathName === '/groups/createGroup' ? 'none' : 'flex',
+            display: hideTabBarRoutes.includes(pathName) ? 'none' : 'flex',
           },
           tabBarLabelStyle: {
             marginTop: -6,
@@ -44,6 +51,7 @@ export default function RootLayout() {
           },
           lazy: true,
         }}
+        backBehavior="history"
       >
         <Tabs.Screen
           name="home/index"
@@ -98,6 +106,20 @@ export default function RootLayout() {
         />
         <Tabs.Screen
           name="groups/createGroup"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="contacts/contactList"
+          options={{
+            href: null,
+            headerShown: false,
+          }}
+        />
+        <Tabs.Screen
+          name="contacts/selectedContactList"
           options={{
             href: null,
             headerShown: false,

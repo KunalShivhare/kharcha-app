@@ -2,10 +2,16 @@ import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import React from 'react';
 import { resize } from '../../../utils/deviceDimentions';
 import { faker } from '@faker-js/faker/.';
-import { StatusBar } from 'expo-status-bar';
+import FloatingButton from '@/src/components/buttons/floatingButton';
+import { router } from 'expo-router';
+import { useFriends } from './hooks';
+import EmptyScreen from '@/src/components/empty/emptyScreen';
+import { Layout } from '@/src/components/themes/globalStyles';
 
 const Friends = () => {
-  const renderItem = ({ item, index }) => {
+  const { friends } = useFriends();
+
+  const renderItem = ({ item, index }: { item: any; index: any }) => {
     const type = faker.helpers.arrayElement(['owe', 'owed']);
     return (
       <View style={styles.friendCardContainer}>
@@ -55,10 +61,27 @@ const Friends = () => {
           Friends
         </Text>
       </View>
-      <FlatList
-        data={Array.from({ length: 20 })}
-        keyExtractor={(item, index) => String(index)}
-        renderItem={renderItem}
+      {friends.length > 0 ? (
+        <FlatList
+          data={friends}
+          keyExtractor={(item, index) => String(index)}
+          renderItem={renderItem}
+        />
+      ) : (
+        <View style={[Layout.container, Layout.alignCenter, Layout.justifyCenter]}>
+          <EmptyScreen />
+        </View>
+      )}
+      <FloatingButton
+        text="+ Add Friend"
+        textStyle={{
+          fontSize: 14,
+          fontWeight: 'bold',
+          color: '#fff',
+        }}
+        onPress={() => {
+          router.push('/contacts/contactList');
+        }}
       />
     </View>
   );

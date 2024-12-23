@@ -5,16 +5,16 @@ import { COLORS } from '../../providers/theme.style';
 
 interface InputFieldProps extends TextInputProps {
   containerStyle?: ViewStyle;
-  ref?: React.Ref<TextInput>;
+  inputRef?: React.Ref<TextInput>;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ ref, containerStyle, ...textInputProps }) => {
+const InputField: React.FC<InputFieldProps> = ({ inputRef, containerStyle, ...textInputProps }) => {
   const [input, setInput] = useState<string>('');
-  const inputRef = useRef<TextInput>(null);
+  const ref = useRef<TextInput>(null);
   return (
     <View style={[styles.textInputContainer, containerStyle]}>
       <TextInput
-        ref={ref ?? inputRef}
+        ref={inputRef ?? ref}
         value={input}
         onChangeText={(input) => setInput(String(input))}
         placeholder="Type something"

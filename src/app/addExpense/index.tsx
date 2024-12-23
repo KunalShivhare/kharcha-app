@@ -92,6 +92,7 @@ const AddExpense = () => {
                     { backgroundColor: item === splitType ? '#101010' : undefined },
                   ]}
                   onPress={() => setSplitType(item)}
+                  key={item}
                 >
                   <Text
                     style={[
