@@ -7,7 +7,7 @@ import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
 import Entypo from '@expo/vector-icons/Entypo';
 import { faker } from '@faker-js/faker/.';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import {
   Image,
@@ -36,9 +36,26 @@ const AddExpense = () => {
     setSplitType,
     amountRef,
     onAddExpense,
+    onGroupPress,
   } = useAddExpense({
     groupId: groupId?.toString() ?? '',
   });
+
+  const GroupListPopup = {
+    show: ({ passProps = {} }: { passProps: any }) => {
+      router.push({
+        pathname: '/modal',
+        params: {
+          cancelOnOutsideClick: true,
+          showHeader: false,
+          noScrollView: false,
+          variant: 'bottom',
+          componentKey: 'GroupList',
+          ...passProps,
+        },
+      });
+    },
+  };
 
   return (
     <View style={styles.container}>
@@ -50,13 +67,15 @@ const AddExpense = () => {
         }}
       >
         <>
-          <HStack style={styles.groupContainer}>
-            <HStack style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <Image source={{ uri: faker.image.avatar() }} style={styles.avatar} />
-              <Text style={styles.groupName}>{faker.word.noun() + ' ' + faker.word.noun()}</Text>
+          <Pressable onPress={() => GroupListPopup.show({ passProps: {} })}>
+            <HStack style={styles.groupContainer}>
+              <HStack style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Image source={{ uri: faker.image.avatar() }} style={styles.avatar} />
+                <Text style={styles.groupName}>{faker.word.noun() + ' ' + faker.word.noun()}</Text>
+              </HStack>
+              <Entypo name="chevron-down" size={resize(24)} color={COLORS.primary} />
             </HStack>
-            <Entypo name="chevron-down" size={resize(24)} color={COLORS.primary} />
-          </HStack>
+          </Pressable>
           <View style={styles.splitGroup}>
             <ImageGroup imageHeight={resize(48)} imageWidth={resize(48)} images={images} />
           </View>

@@ -14,7 +14,7 @@ import { useShallow } from 'zustand/react/shallow';
 import LottieView from 'lottie-react-native';
 import { useGroups } from '@/src/app/(tabs)/groups/hooks';
 
-const GroupList = ({}) => {
+const GroupList = (props: any) => {
   const [groups, groupLength] = useGroupStore(
     useShallow((state) => [state.groups, state.groups.length])
   );

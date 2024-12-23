@@ -1,3 +1,4 @@
+import GroupList from '@/src/components/groups/groupList';
 import { useExpenseStore } from '@/src/stores/expenseStore';
 import { distributeEqualPrice } from '@/src/utilities/expenseUtils';
 import { faker } from '@faker-js/faker/.';
@@ -53,6 +54,10 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
     router.back();
   };
 
+  const onGroupPress = () => {
+    router.push('/modal');
+  };
+
   return {
     description,
     setDescription,
@@ -62,6 +67,7 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
     setSplitType,
     amountRef,
     onAddExpense,
+    onGroupPress,
   };
 };
 
