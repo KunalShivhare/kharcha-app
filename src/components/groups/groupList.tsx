@@ -5,8 +5,6 @@ import { HStack } from '../customUI/HStack';
 import { VStack } from '../customUI/VStack';
 import { Text } from '../text';
 import Button from '../buttons/button';
-import { AntDesign } from '@expo/vector-icons';
-import { resize } from '@/src/utils/deviceDimentions';
 import { router } from 'expo-router';
 import { useGroupStore } from '@/src/stores/groupStore';
 import { gap, Layout, padding } from '../themes/globalStyles';
@@ -22,7 +20,13 @@ const GroupList = (props: any) => {
   const emptyUrl = require('../../assets/lottie/empty.json');
 
   const onAdd = () => {
-    router.push('/groups/createGroup');
+    router.push({
+      pathname: '/contacts/contactList',
+      params: {
+        headerTitle: 'New Group',
+        navigateToScreen: '/groups/createGroup',
+      },
+    });
   };
   return (
     <VStack style={[padding.t24, padding.h16]}>

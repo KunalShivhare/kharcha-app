@@ -18,12 +18,27 @@ import { useContacts } from './hooks';
 import { MaterialIcons } from '@expo/vector-icons';
 import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
-import { router } from 'expo-router';
+import { useRoute } from '@react-navigation/native';
 import EmptyScreen from '@/src/components/empty/emptyScreen';
+import { Href } from 'expo-router';
+
+interface ContactListProps {
+  headerTitle?: string;
+  navigateToScreen?: Href<string>;
+}
 
 const ContactList = () => {
-  const { contacts, selectedContacts, onSelectContact, loadingContact, isSelected, onGoBack } =
-    useContacts();
+  const { params } = useRoute();
+  const { headerTitle, navigateToScreen } = params as ContactListProps;
+  const {
+    contacts,
+    selectedContacts,
+    onSelectContact,
+    loadingContact,
+    isSelected,
+    onGoBack,
+    onNext,
+  } = useContacts(params || {});
 
   const contactCard = useCallback(
     ({ item: contact, index }: { item: any; index: number }) => {
@@ -59,7 +74,7 @@ const ContactList = () => {
 
   return (
     <View style={[Layout.container]}>
-      <Header title="Contacts" onPressback={onGoBack} />
+      <Header title={headerTitle ?? 'Contacts'} onPressback={onGoBack} />
       {!loadingContact && contacts.length > 0 && (
         <>
           <VStack style={[padding.h16, padding.v12, Layout.container]}>
@@ -76,10 +91,7 @@ const ContactList = () => {
           </VStack>
           {selectedContacts.length > 0 && (
             <View style={[padding.v16, padding.h16]}>
-              <TouchableOpacity
-                style={styles.buttonContainer}
-                onPress={() => router.push('/contacts/selectedContactList')}
-              >
+              <TouchableOpacity style={styles.buttonContainer} onPress={onNext}>
                 <Text style={styles.title}>Next</Text>
               </TouchableOpacity>
             </View>

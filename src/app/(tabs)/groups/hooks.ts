@@ -1,9 +1,11 @@
+import { useContactStore } from '@/src/stores/contactStore';
 import { useExpenseStore } from '@/src/stores/expenseStore';
 import { useGroupStore } from '@/src/stores/groupStore';
 import { faker } from '@faker-js/faker/.';
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
 const useGroups = (props?: any) => {
   const groupId = props?.groupId ?? '';
@@ -28,7 +30,9 @@ const useGroups = (props?: any) => {
   const { createGroup } = useGroupStore();
   const groupData = useGroupStore((state) => state.groups.find((item) => item?.id === groupId));
   const expenses = useExpenseStore((state) => state.expenses);
-
+  const [selectedContacts, resetSelectedContacts] = useContactStore(
+    useShallow((state) => [state.selectedContacts, state.resetSelectedContacts])
+  );
   const expenseData = useMemo(
     () => expenses.filter((item) => item?.groupId === groupId),
     [expenses, groupId]
@@ -44,6 +48,7 @@ const useGroups = (props?: any) => {
   const reset = () => {
     setGroupName('');
     setGroupType('');
+    resetSelectedContacts();
   };
 
   const onDonePress = () => {
@@ -56,11 +61,12 @@ const useGroups = (props?: any) => {
       name: groupName,
       type: selectedGroupType,
       avatar: faker.image.avatar(),
+      members: selectedContacts,
     };
 
     createGroup(group);
     reset();
-    router.back();
+    router.replace('/home');
   };
 
   const onSettleUp = () => {

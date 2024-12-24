@@ -5,7 +5,7 @@ import { Contact } from './types';
 import { router } from 'expo-router';
 import useBackHandler from '@/src/utilities/useBackHandler';
 
-const useContacts = () => {
+const useContacts = ({ navigateToScreen }: { navigateToScreen?: string }) => {
   const [
     contacts,
     fetchContacts,
@@ -48,6 +48,12 @@ const useContacts = () => {
     resetSelectedContacts();
   };
 
+  const onNext = () => {
+    router.push({
+      pathname: navigateToScreen ?? '/contacts/selectedContactList',
+    });
+  };
+
   useEffect(() => {
     fetchContacts();
   }, []);
@@ -63,6 +69,7 @@ const useContacts = () => {
     resetSelectedContacts,
     onGoBack,
     removeContact,
+    onNext,
   };
 };
 export { useContacts };
