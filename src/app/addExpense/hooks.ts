@@ -1,5 +1,5 @@
-import GroupList from '@/src/components/groups/groupList';
 import { useExpenseStore } from '@/src/stores/expenseStore';
+import { useSelfStore } from '@/src/stores/selfStore';
 import { distributeEqualPrice } from '@/src/utilities/expenseUtils';
 import { faker } from '@faker-js/faker/.';
 import { router } from 'expo-router';
@@ -17,27 +17,12 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const [splitType, setSplitType] = useState<SPLIT_TYPE>(SPLIT_TYPE.EQUALLY);
   const amountRef = useRef<TextInput>(null);
+  const { self } = useSelfStore();
+  const { addExpense } = useExpenseStore();
 
-  const { addExpense, expenses } = useExpenseStore();
-
-  const onAddExpense = async () => {
+  const onAddExpense = async (members: []) => {
     if (amount === 0) return;
-    const { persons: personWithPrice, totalLent } = distributeEqualPrice(amount ?? 0, [
-      {
-        id: '1',
-        name: 'Kunal',
-      },
-      {
-        id: '2',
-        name: 'Parsediya',
-      },
-      {
-        id: '3',
-        name: 'Aditya',
-      },
-    ]);
-    console.log('🚀 ~ onAddExpense ~ personWithPrice:', personWithPrice);
-
+    const { persons: personWithPrice, totalLent } = distributeEqualPrice(amount ?? 0, members);
     const expense = {
       id: faker.database.mongodbObjectId(),
       avatar: faker.image.avatar(),
@@ -47,6 +32,30 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
       groupId: groupId,
       person: personWithPrice,
       totalLent: totalLent,
+      paidBy: '1',
+    };
+    await addExpense(expense);
+    router.back();
+  };
+
+  const onAddUnequalExpense = async (personWithAmount: any[]) => {
+    const totalAmount = personWithAmount.reduce(
+      (acc, person) => acc + parseFloat(person.amount),
+      0
+    );
+    const selfAmonuntPerson = personWithAmount.filter(
+      (person) => person.phoneNumber === self.phoneNumber
+    );
+
+    const expense = {
+      id: faker.database.mongodbObjectId(),
+      avatar: faker.image.avatar(),
+      description: description,
+      splitType: splitType,
+      amount: amount,
+      groupId: groupId,
+      person: personWithAmount,
+      totalLent: totalAmount - selfAmonuntPerson[0].amount,
       paidBy: '1',
     };
 
@@ -68,6 +77,7 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
     amountRef,
     onAddExpense,
     onGroupPress,
+    onAddUnequalExpense,
   };
 };
 

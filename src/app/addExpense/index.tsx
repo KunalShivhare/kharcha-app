@@ -4,10 +4,12 @@ import { VStack } from '@/src/components/customUI/VStack';
 import Header from '@/src/components/header/header';
 import InputField from '@/src/components/inputs/inputField';
 import { COLORS } from '@/src/providers/theme.style';
+import { useExpenseShareWithPersonsStore } from '@/src/stores/expenseShareWithPersons';
+import { useGroupStore } from '@/src/stores/groupStore';
 import { resize } from '@/src/utils/deviceDimentions';
 import Entypo from '@expo/vector-icons/Entypo';
 import { faker } from '@faker-js/faker/.';
-import { router, useLocalSearchParams, useRouter } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import {
   Image,
@@ -27,6 +29,7 @@ const AddExpense = () => {
     'https://picsum.photos/200',
   ];
   const { groupId } = useLocalSearchParams();
+
   const {
     amount,
     description,
@@ -37,9 +40,17 @@ const AddExpense = () => {
     amountRef,
     onAddExpense,
     onGroupPress,
+    onAddUnequalExpense,
   } = useAddExpense({
     groupId: groupId?.toString() ?? '',
   });
+
+  const { groups } = useGroupStore();
+  const { expenseSharesWithPersons } = useExpenseShareWithPersonsStore();
+  const group = groups.find((group) => group.id === groupId);
+  const members = group?.members ?? [];
+
+  const equalMembers = members;
 
   const GroupListPopup = {
     show: ({ passProps = {} }: { passProps: any }) => {
@@ -56,6 +67,49 @@ const AddExpense = () => {
       });
     },
   };
+
+  const PriceDistribution = {
+    show: ({ passProps = {} }: { passProps: any }) => {
+      router.push({
+        pathname: '/modal',
+        params: {
+          cancelOnOutsideClick: true,
+          showHeader: false,
+          noScrollView: false,
+          variant: 'bottom',
+          componentKey: 'MemberList',
+          ...passProps,
+        },
+      });
+    },
+  };
+
+  const handleSetUnequally = (item: SPLIT_TYPE) => {
+    setSplitType(item);
+    if (item === SPLIT_TYPE.UNEQUALLY && !isAddExpenseDisabled)
+      PriceDistribution.show({ passProps: { groupId: groupId, amount } });
+  };
+
+  const handleAddExpense = async () => {
+    if (splitType === SPLIT_TYPE.UNEQUALLY) {
+      const isShareEmpty = await expenseSharesWithPersons.every((item) => {
+        if (parseFloat(item.amount) === 0) {
+          return true;
+        }
+      });
+
+      if (isShareEmpty) {
+        alert('Bhai apne share toh daal lo');
+        return;
+      }
+
+      onAddUnequalExpense(expenseSharesWithPersons);
+    } else if (splitType === SPLIT_TYPE.EQUALLY) {
+      onAddExpense(equalMembers);
+    }
+  };
+
+  const isAddExpenseDisabled = !description || !amount || amount === 0;
 
   return (
     <View style={styles.container}>
@@ -110,7 +164,7 @@ const AddExpense = () => {
                     styles.splitTypeItem,
                     { backgroundColor: item === splitType ? '#101010' : undefined },
                   ]}
-                  onPress={() => setSplitType(item)}
+                  onPress={() => handleSetUnequally(item)}
                   key={item}
                 >
                   <Text
@@ -140,7 +194,11 @@ const AddExpense = () => {
         </>
       </ScrollView>
       <View style={styles.padding16}>
-        <TouchableOpacity style={styles.buttonContainer} onPress={onAddExpense}>
+        <TouchableOpacity
+          disabled={isAddExpenseDisabled}
+          style={styles.buttonContainer}
+          onPress={() => handleAddExpense()}
+        >
           <Text style={styles.title}>Done</Text>
         </TouchableOpacity>
       </View>

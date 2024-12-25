@@ -5,13 +5,15 @@ import Separator from '@/src/components/customUI/Separator';
 import { VStack } from '@/src/components/customUI/VStack';
 import Header from '@/src/components/header/header';
 import { COLORS } from '@/src/providers/theme.style';
+import { useSelfStore } from '@/src/stores/selfStore';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { faker } from '@faker-js/faker/.';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 const Account = () => {
+  const { self } = useSelfStore();
+
   const featuresList = [
     {
       name: 'Additions',
@@ -75,11 +77,7 @@ const Account = () => {
       <ScrollView>
         <VStack style={styles.container}>
           <HStack style={styles.labelContainer}>
-            <AvatarWithLabel
-              uri={faker.image.avatar()}
-              label="Rishabh Parsediya"
-              subLabel="parsediyarishabh@gmail.com"
-            />
+            <AvatarWithLabel uri={self?.image} label={self?.name} subLabel={self?.email} />
             <Feather name="edit" size={24} color={COLORS.primary} />
           </HStack>
           <Separator />

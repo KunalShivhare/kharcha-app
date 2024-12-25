@@ -1,11 +1,25 @@
-import React from 'react';
-import { Redirect, Slot, Stack } from 'expo-router';
-import AuthProvider from '../providers/AuthProvider';
 import { ThemeProvider } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Stack } from 'expo-router';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AuthProvider from '../providers/AuthProvider';
+import { useSelfStore } from '../stores/selfStore';
 
 const RootLayout = () => {
+  const { addSelf } = useSelfStore();
+
+  useEffect(() => {
+    addSelf({
+      firstName: 'Kunal',
+      image: 'https://picsum.photos/200',
+      lastName: 'Shivhare',
+      name: 'Kunal Shivhare',
+      phoneNumber: '9990312010',
+      email: 'kunalshivharesucks@phub.com',
+    });
+  }, []);
+
   return (
     <SafeAreaView style={StyleSheet.absoluteFill}>
       <AuthProvider>

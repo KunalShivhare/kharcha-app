@@ -5,9 +5,6 @@ import { COLORS } from '@/src/providers/theme.style';
 import { router } from 'expo-router';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { useAuth } from '../../../providers/AuthProvider';
-import Button from '@/src/components/buttons/button';
-import { useEffect } from 'react';
-import * as Contacts from 'expo-contacts';
 
 const Home = () => {
   const { signOut } = useAuth();
