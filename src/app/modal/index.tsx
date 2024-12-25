@@ -1,26 +1,25 @@
+import GroupList from '@/src/components/groups/groupList';
+import MemberList from '@/src/components/members/mebersList';
+import { Layout } from '@/src/components/themes/globalStyles';
+import { useTheme } from '@/src/components/themes/hooks';
+import { handleAndroidBackButton, removeAndroidBackButtonHandler } from '@/src/utilities';
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import {
   Animated,
   Dimensions,
   Easing,
+  LayoutChangeEvent,
+  Pressable,
+  ScrollView,
+  StyleProp,
+  StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  ScrollView,
-  LayoutChangeEvent,
-  StyleProp,
   ViewStyle,
-  SafeAreaView,
-  Pressable,
-  StyleSheet,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useTheme } from '@/src/components/themes/hooks';
-import { AntDesign } from '@expo/vector-icons';
-import { handleAndroidBackButton, removeAndroidBackButtonHandler } from '@/src/utilities';
-import { Layout } from '@/src/components/themes/globalStyles';
-import { useLocalSearchParams } from 'expo-router';
-import GroupList from '@/src/components/groups/groupList';
 
 const { height } = Dimensions.get('window');
 
@@ -124,6 +123,8 @@ const CustomModal = () => {
     switch (componentKey) {
       case 'GroupList':
         return <GroupList closeModal={closeModal} />;
+      case 'MemberList':
+        return <MemberList closeModal={closeModal} {...props} />;
       default:
         return null; // Handle cases where no valid key is passed
     }

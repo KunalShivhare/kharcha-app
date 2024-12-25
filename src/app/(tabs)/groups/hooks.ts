@@ -1,6 +1,7 @@
 import { useContactStore } from '@/src/stores/contactStore';
 import { useExpenseStore } from '@/src/stores/expenseStore';
 import { useGroupStore } from '@/src/stores/groupStore';
+import { useSelfStore } from '@/src/stores/selfStore';
 import { faker } from '@faker-js/faker/.';
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
@@ -33,6 +34,7 @@ const useGroups = (props?: any) => {
   const [selectedContacts, resetSelectedContacts] = useContactStore(
     useShallow((state) => [state.selectedContacts, state.resetSelectedContacts])
   );
+  const { self } = useSelfStore();
   const expenseData = useMemo(
     () => expenses.filter((item) => item?.groupId === groupId),
     [expenses, groupId]
@@ -61,7 +63,7 @@ const useGroups = (props?: any) => {
       name: groupName,
       type: selectedGroupType,
       avatar: faker.image.avatar(),
-      members: selectedContacts,
+      members: [...selectedContacts, self],
     };
 
     createGroup(group);
