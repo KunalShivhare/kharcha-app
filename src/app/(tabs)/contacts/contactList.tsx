@@ -111,11 +111,7 @@ const ContactList = () => {
           <Text variant="label2_semibold">Loading contacts...</Text>
         </ScrollView>
       )}
-      {contacts.length === 0 && !loadingContact && (
-        <View style={[Layout.container, Layout.justifyCenter, Layout.alignCenter]}>
-          <EmptyScreen />
-        </View>
-      )}
+      {contacts.length === 0 && !loadingContact && <EmptyScreen />}
     </View>
   );
 };

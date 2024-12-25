@@ -3,8 +3,9 @@ import Header from '@/src/components/header/header';
 import SummaryCard from '@/src/components/home/summaryCard';
 import { COLORS } from '@/src/providers/theme.style';
 import { router } from 'expo-router';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { useAuth } from '../../../providers/AuthProvider';
+import { VStack } from '@/src/components/customUI/VStack';
 
 const Home = () => {
   const { signOut } = useAuth();
@@ -16,7 +17,7 @@ const Home = () => {
   };
 
   return (
-    <View>
+    <VStack flex={1}>
       <StatusBar backgroundColor={COLORS.darkBackground} barStyle={'light-content'} />
       <Header title="Home" showBackButton={false} />
       <SummaryCard
@@ -26,10 +27,12 @@ const Home = () => {
         onViewDetails={undefined}
         onSettleUp={undefined}
       />
-      <GroupList />
+      <VStack flex={1}>
+        <GroupList />
+      </VStack>
       {/* <Button title="Add Expense" onPress={onAddExpense}></Button>
       <Button title="logout" onPress={signOut}></Button> */}
-    </View>
+    </VStack>
   );
 };
 

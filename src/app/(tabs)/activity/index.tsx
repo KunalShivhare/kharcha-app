@@ -1,5 +1,5 @@
 import ActivityCard from '@/src/components/cards/activity';
-import ListEmptyComponent from '@/src/components/customUI/ListEmptyComponent';
+import EmptyScreen from '@/src/components/empty/emptyScreen';
 import Header from '@/src/components/header/header';
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
@@ -11,16 +11,17 @@ const Activity = () => {
   return (
     <View style={{ flex: 1 }}>
       <Header title="Activity" />
-      <FlatList
-        data={acitivityCards}
-        keyExtractor={(_, index) => String(index)}
-        renderItem={renderItem}
-        ListEmptyComponent={<ListEmptyComponent />}
-      />
+      {acitivityCards.length ? (
+        <FlatList
+          data={acitivityCards}
+          keyExtractor={(_, index) => String(index)}
+          renderItem={renderItem}
+        />
+      ) : (
+        <EmptyScreen />
+      )}
     </View>
   );
 };
 
 export default Activity;
-
-const styles = StyleSheet.create({});

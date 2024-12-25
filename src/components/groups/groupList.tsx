@@ -9,15 +9,14 @@ import { router } from 'expo-router';
 import { useGroupStore } from '@/src/stores/groupStore';
 import { gap, Layout, padding } from '../themes/globalStyles';
 import { useShallow } from 'zustand/react/shallow';
-import LottieView from 'lottie-react-native';
 import { useGroups } from '@/src/app/(tabs)/groups/hooks';
+import EmptyScreen from '../empty/emptyScreen';
 
 const GroupList = (props: any) => {
   const [groups, groupLength] = useGroupStore(
     useShallow((state) => [state.groups, state.groups.length])
   );
   const { onPressGroupCard } = useGroups();
-  const emptyUrl = require('../../assets/lottie/empty.json');
 
   const onAdd = () => {
     router.push({
@@ -28,25 +27,36 @@ const GroupList = (props: any) => {
       },
     });
   };
+
+  const renderHeader = ({ showButton }: { showButton: boolean }) => {
+    return (
+      <HStack style={[Layout.spaceBetween, Layout.alignCenter]}>
+        <Text variant={'heading3_semibold'} fontColor="white">
+          Groups
+        </Text>
+        {showButton && (
+          <Button
+            type="Secondary"
+            title="+ Add"
+            textVariant="label3_regular"
+            customStyle={styles.customStyle}
+            color="#1CC29F"
+            size={'short'}
+            textStyle={{ ...padding.r2, ...Layout.alignSelfCenter }}
+            onPress={onAdd}
+          />
+        )}
+      </HStack>
+    );
+  };
+
   return (
-    <VStack style={[padding.t24, padding.h16]}>
+    <VStack flex={1} style={[padding.t24, padding.h16]}>
       {groupLength ? (
         <VStack>
-          <HStack style={[Layout.spaceBetween, Layout.alignCenter]}>
-            <Text variant={'heading3_semibold'} fontColor="white">
-              Groups
-            </Text>
-            <Button
-              type="Secondary"
-              title="+ Add"
-              textVariant="label3_regular"
-              customStyle={styles.customStyle}
-              color="#1CC29F"
-              size={'short'}
-              textStyle={{ ...padding.r2, ...Layout.alignSelfCenter }}
-              onPress={onAdd}
-            />
-          </HStack>
+          {renderHeader({
+            showButton: true,
+          })}
           {groups?.map((group: any) => {
             return (
               <Pressable key={group?.id} onPress={() => onPressGroupCard(group)}>
@@ -72,40 +82,12 @@ const GroupList = (props: any) => {
           })}
         </VStack>
       ) : (
-        <>
-          <Text variant={'heading3_semibold'} fontColor="white">
-            Groups
-          </Text>
-
-          <VStack
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <LottieView
-              style={{
-                height: '60%',
-                width: '100%',
-              }}
-              loop={true}
-              autoPlay
-              resizeMode="contain"
-              source={emptyUrl}
-            />
-            <Text fontColor="white">Oops! Nothing here</Text>
-            <Button
-              type="Secondary"
-              title="+ Create Group"
-              textVariant="label3_regular"
-              customStyle={{ ...styles.customStyle, marginTop: 10 }}
-              color="#1CC29F"
-              size={'short'}
-              textStyle={{ ...padding.r2, ...Layout.alignSelfCenter }}
-              onPress={onAdd}
-            />
-          </VStack>
-        </>
+        <VStack flex={1}>
+          {renderHeader({
+            showButton: false,
+          })}
+          <EmptyScreen showButton buttonTitle="+ Create Group" onPress={onAdd} />
+        </VStack>
       )}
     </VStack>
   );
