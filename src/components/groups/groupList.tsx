@@ -11,21 +11,29 @@ import { gap, Layout, padding } from '../themes/globalStyles';
 import { useShallow } from 'zustand/react/shallow';
 import { useGroups } from '@/src/app/(tabs)/groups/hooks';
 import EmptyScreen from '../empty/emptyScreen';
+import { useContactStore } from '@/src/stores/contactStore';
 
 const GroupList = (props: any) => {
   const [groups, groupLength] = useGroupStore(
     useShallow((state) => [state.groups, state.groups.length])
   );
+  const contacts = useContactStore((state) => state.contacts);
   const { onPressGroupCard } = useGroups();
 
   const onAdd = () => {
-    router.push({
-      pathname: '/contacts/contactList',
-      params: {
-        headerTitle: 'New Group',
-        navigateToScreen: '/groups/createGroup',
-      },
-    });
+    if (contacts.length) {
+      router.push({
+        pathname: '/contacts/contactList',
+        params: {
+          headerTitle: 'New Group',
+          navigateToScreen: '/groups/createGroup',
+        },
+      });
+    } else {
+      router.push({
+        pathname: '/groups/createGroup',
+      });
+    }
   };
 
   const renderHeader = ({ showButton }: { showButton: boolean }) => {

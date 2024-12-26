@@ -55,7 +55,9 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: string }) => {
   };
 
   useEffect(() => {
-    fetchContacts();
+    if (!contacts.length) {
+      fetchContacts();
+    }
   }, []);
 
   useBackHandler(onGoBack);

@@ -6,8 +6,10 @@ import { router } from 'expo-router';
 import { StatusBar, StyleSheet } from 'react-native';
 import { useAuth } from '../../../providers/AuthProvider';
 import { VStack } from '@/src/components/customUI/VStack';
+import { useHome } from './hooks';
 
 const Home = () => {
+  const {} = useHome();
   const { signOut } = useAuth();
   const onAddExpense = () => {
     router.push('/addExpense');
