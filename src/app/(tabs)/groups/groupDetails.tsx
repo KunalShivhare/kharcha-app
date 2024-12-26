@@ -133,7 +133,7 @@ const GroupDetails = () => {
         </VStack>
       ) : (
         <>
-          <EmptyScreen showButton buttonTitle={'+ Add Expense'} onAdd={() => onAdd(groupId)} />
+          <EmptyScreen showButton buttonTitle={'+ Add Expense'} onPress={() => onAdd(groupId)} />
         </>
       )}
     </View>
