@@ -9,7 +9,6 @@ import { useGroupStore } from '@/src/stores/groupStore';
 import { resize } from '@/src/utils/deviceDimentions';
 import Entypo from '@expo/vector-icons/Entypo';
 import { faker } from '@faker-js/faker/.';
-import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import {
   Image,
@@ -28,7 +27,8 @@ const AddExpense = () => {
     'https://picsum.photos/200',
     'https://picsum.photos/200',
   ];
-  const { groupId } = useLocalSearchParams();
+  // const { groupId } = useLocalSearchParams();
+  const groupId = '';
 
   const {
     amount,
@@ -54,33 +54,33 @@ const AddExpense = () => {
 
   const GroupListPopup = {
     show: ({ passProps = {} }: { passProps: any }) => {
-      router.push({
-        pathname: '/modal',
-        params: {
-          cancelOnOutsideClick: true,
-          showHeader: false,
-          noScrollView: false,
-          variant: 'bottom',
-          componentKey: 'GroupList',
-          ...passProps,
-        },
-      });
+      // router.push({
+      //   pathname: '/modal',
+      //   params: {
+      //     cancelOnOutsideClick: true,
+      //     showHeader: false,
+      //     noScrollView: false,
+      //     variant: 'bottom',
+      //     componentKey: 'GroupList',
+      //     ...passProps,
+      //   },
+      // });
     },
   };
 
   const PriceDistribution = {
     show: ({ passProps = {} }: { passProps: any }) => {
-      router.push({
-        pathname: '/modal',
-        params: {
-          cancelOnOutsideClick: true,
-          showHeader: false,
-          noScrollView: false,
-          variant: 'bottom',
-          componentKey: 'MemberList',
-          ...passProps,
-        },
-      });
+      // router.push({
+      //   pathname: '/modal',
+      //   params: {
+      //     cancelOnOutsideClick: true,
+      //     showHeader: false,
+      //     noScrollView: false,
+      //     variant: 'bottom',
+      //     componentKey: 'MemberList',
+      //     ...passProps,
+      //   },
+      // });
     },
   };
 
@@ -146,7 +146,7 @@ const AddExpense = () => {
             <VStack style={[styles.amountContainer]}>
               <Text style={[styles.amountText]}>Amount</Text>
               <InputField
-                ref={amountRef}
+                inputRef={amountRef}
                 placeholder="Enter amount"
                 style={[styles.amountTextInput]}
                 value={amount ? String(amount) : ''}

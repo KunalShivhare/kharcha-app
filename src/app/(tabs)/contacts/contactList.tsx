@@ -20,11 +20,10 @@ import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
 import { useRoute } from '@react-navigation/native';
 import EmptyScreen from '@/src/components/empty/emptyScreen';
-import { Href } from 'expo-router';
 
 interface ContactListProps {
   headerTitle?: string;
-  navigateToScreen?: Href<string>;
+  navigateToScreen?: string;
 }
 
 const ContactList = () => {

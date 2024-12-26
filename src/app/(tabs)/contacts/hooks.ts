@@ -2,7 +2,6 @@ import { useContactStore } from '@/src/stores/contactStore';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Contact } from './types';
-import { router } from 'expo-router';
 import useBackHandler from '@/src/utilities/useBackHandler';
 
 const useContacts = ({ navigateToScreen }: { navigateToScreen?: string }) => {
@@ -44,14 +43,14 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: string }) => {
   };
 
   const onGoBack = () => {
-    router.back();
+    // router.back();
     resetSelectedContacts();
   };
 
   const onNext = () => {
-    router.push({
-      pathname: navigateToScreen ?? '/contacts/selectedContactList',
-    });
+    // router.push({
+    //   pathname: navigateToScreen ?? '/contacts/selectedContactList',
+    // });
   };
 
   useEffect(() => {

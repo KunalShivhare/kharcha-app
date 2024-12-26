@@ -1,29 +1,25 @@
-import React, { useState } from "react"
-import { StyleSheet, View, Text } from "react-native"
-import DismissKeyboard from "../../../HOCs/DismissKeyboard"
-import Header from "../../../components/header/header"
-import InputField from "../../../components/inputs/inputField"
-import { resize } from "../../../utils/deviceDimentions"
-import LargeButton from "../../../components/buttons/largeButton"
-import { COLORS } from "../../../providers/theme.style"
-import Checkbox from "expo-checkbox"
-import { Link, router } from "expo-router"
+import React, { useState } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import DismissKeyboard from '../../../HOCs/DismissKeyboard';
+import Header from '../../../components/header/header';
+import InputField from '../../../components/inputs/inputField';
+import { resize } from '../../../utils/deviceDimentions';
+import LargeButton from '../../../components/buttons/largeButton';
+import { COLORS } from '../../../providers/theme.style';
+import Checkbox from 'expo-checkbox';
 
 const Signup = () => {
-  const [isChecked, setChecked] = useState<boolean>(false)
+  const [isChecked, setChecked] = useState<boolean>(false);
   const handleOnPressSignUp = () => {
-    router.push("/otpVerification")
-  }
+    // router.push("/otpVerification")
+  };
   return (
     <DismissKeyboard>
       <View style={styles.mainContainer}>
-        <Header title={"Sign Up"} />
+        <Header title={'Sign Up'} />
         <View style={styles.signUpFormContainer}>
           <View style={styles.signUpFormFieldContainer}>
-            <InputField
-              placeholder="Mobile Number"
-              keyboardType="decimal-pad"
-            />
+            <InputField placeholder="Mobile Number" keyboardType="decimal-pad" />
             <InputField placeholder="Email" />
             <InputField
               placeholder="Password"
@@ -43,9 +39,7 @@ const Signup = () => {
               <View style={styles.signUpAgreementTextContainer}>
                 <Text style={styles.signUpAgreementText}>
                   {`By signing up, you agree to the `}
-                  <Text style={styles.green100}>
-                    {`Terms of Service and Privacy Policy`}
-                  </Text>
+                  <Text style={styles.green100}>{`Terms of Service and Privacy Policy`}</Text>
                 </Text>
               </View>
             </View>
@@ -55,17 +49,17 @@ const Signup = () => {
             <View style={styles.loginTextContainer}>
               <Text style={styles.loginText}>
                 {`Already have an account? `}
-                <Link href={"/login"} style={styles.login}>{`Login`}</Link>
+                {/* <Link href={"/login"} style={styles.login}>{`Login`}</Link> */}
               </Text>
             </View>
           </View>
         </View>
       </View>
     </DismissKeyboard>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -84,15 +78,15 @@ const styles = StyleSheet.create({
   },
 
   signUpAgreementContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   signUpAgreementTextContainer: {
     paddingHorizontal: resize(8),
   },
   signUpAgreementText: {
     color: COLORS.light100,
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: resize(14),
     lineHeight: resize(18),
   },
@@ -103,16 +97,16 @@ const styles = StyleSheet.create({
     borderColor: COLORS.green100,
   },
   loginTextContainer: {
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   loginText: {
     fontSize: resize(16),
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: resize(20),
-    color: "#91919F",
+    color: '#91919F',
   },
   login: {
     color: COLORS.green100,
-    textDecorationLine: "underline",
+    textDecorationLine: 'underline',
   },
-})
+});

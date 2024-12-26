@@ -5,7 +5,6 @@ import { HStack } from '../customUI/HStack';
 import { VStack } from '../customUI/VStack';
 import { Text } from '../text';
 import Button from '../buttons/button';
-import { router } from 'expo-router';
 import { useGroupStore } from '@/src/stores/groupStore';
 import { gap, Layout, padding } from '../themes/globalStyles';
 import { useShallow } from 'zustand/react/shallow';
@@ -22,17 +21,17 @@ const GroupList = (props: any) => {
 
   const onAdd = () => {
     if (contacts.length) {
-      router.push({
-        pathname: '/contacts/contactList',
-        params: {
-          headerTitle: 'New Group',
-          navigateToScreen: '/groups/createGroup',
-        },
-      });
+      // router.push({
+      //   pathname: '/contacts/contactList',
+      //   params: {
+      //     headerTitle: 'New Group',
+      //     navigateToScreen: '/groups/createGroup',
+      //   },
+      // });
     } else {
-      router.push({
-        pathname: '/groups/createGroup',
-      });
+      // router.push({
+      //   pathname: '/groups/createGroup',
+      // });
     }
   };
 

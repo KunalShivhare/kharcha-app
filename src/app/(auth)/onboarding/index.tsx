@@ -1,35 +1,34 @@
-import { router } from "expo-router"
-import React from "react"
-import { StyleSheet, View } from "react-native"
-import AppIntroSlider from "../../../components/appIntroSlider/appIntroSlider"
-import LargeButton from "../../../components/buttons/largeButton"
-import { COLORS } from "../../../providers/theme.style"
-import { resize } from "../../../utils/deviceDimentions"
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import AppIntroSlider from '../../../components/appIntroSlider/appIntroSlider';
+import LargeButton from '../../../components/buttons/largeButton';
+import { COLORS } from '../../../providers/theme.style';
+import { resize } from '../../../utils/deviceDimentions';
 
 const Onboarding = () => {
   const handleGetStartedOnPress = () => {
-    router.push("/signup")
-  }
+    // router.push("/signup")
+  };
   const handleLoginOnPress = () => {
-    router.push("/login")
-  }
+    // router.push("/login")
+  };
 
   return (
     <View style={styles.container}>
       <AppIntroSlider />
       <View style={styles.doubleCTAContainer}>
         <LargeButton
-          title={"Get Started"}
+          title={'Get Started'}
           style={{
             flex: 1,
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             borderWidth: 1,
             borderColor: COLORS.light100,
           }}
           onPress={handleGetStartedOnPress}
         />
         <LargeButton
-          title={"Login"}
+          title={'Login'}
           onPress={handleLoginOnPress}
           style={{
             flex: 1,
@@ -37,10 +36,10 @@ const Onboarding = () => {
         />
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default Onboarding
+export default Onboarding;
 
 const styles = StyleSheet.create({
   container: {
@@ -48,12 +47,12 @@ const styles = StyleSheet.create({
   },
   doubleCTAContainer: {
     bottom: 0,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingVertical: resize(10),
     marginBottom: resize(16),
     gap: 10,
     marginHorizontal: resize(16),
   },
-})
+});

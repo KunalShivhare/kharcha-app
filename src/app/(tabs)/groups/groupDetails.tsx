@@ -9,14 +9,13 @@ import { gap, Layout, padding } from '@/src/components/themes/globalStyles';
 import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
 import { faker } from '@faker-js/faker/.';
-import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { useGroups } from './hooks';
 
 const GroupDetails = () => {
-  const { groupId } = useLocalSearchParams<{ groupId: string }>();
-
+  // const { groupId } = useLocalSearchParams<{ groupId: string }>();
+  const groupId = '';
   const { owed, own, onSettleUp, onViewDetails, onBalance, onAdd, groupData, expenseData } =
     useGroups({
       groupId,

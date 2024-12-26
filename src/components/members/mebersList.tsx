@@ -4,8 +4,6 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import Button from '../buttons/button';
 import InputWithLabel from '../inputs/InputWithLabel';
 import { useExpenseShareWithPersonsStore } from '@/src/stores/expenseShareWithPersons';
-import { router } from 'expo-router';
-import { it } from '@faker-js/faker/.';
 
 interface DataItem {
   id: string;
@@ -70,7 +68,7 @@ const MemberList = (props: any) => {
       return personArray.push({ ...rest, amount: item.amount });
     });
     addExpenseShareWithPersons(personArray);
-    router.back();
+    // router.back();
   };
 
   return (

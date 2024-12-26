@@ -3,7 +3,6 @@ import React from 'react';
 import { resize } from '../../../utils/deviceDimentions';
 import { faker } from '@faker-js/faker/.';
 import FloatingButton from '@/src/components/buttons/floatingButton';
-import { router } from 'expo-router';
 import { useFriends } from './hooks';
 import EmptyScreen from '@/src/components/empty/emptyScreen';
 import { Layout } from '@/src/components/themes/globalStyles';

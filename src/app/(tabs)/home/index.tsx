@@ -2,25 +2,31 @@ import GroupList from '@/src/components/groups/groupList';
 import Header from '@/src/components/header/header';
 import SummaryCard from '@/src/components/home/summaryCard';
 import { COLORS } from '@/src/providers/theme.style';
-import { router } from 'expo-router';
 import { StatusBar, StyleSheet } from 'react-native';
 import { useAuth } from '../../../providers/AuthProvider';
 import { VStack } from '@/src/components/customUI/VStack';
 import { useHome } from './hooks';
+import { useTheme } from '@/src/components/themes/hooks';
 
 const Home = () => {
   const {} = useHome();
   const { signOut } = useAuth();
-  const onAddExpense = () => {
-    router.push('/addExpense');
-  };
-  const onModal = () => {
-    router.push('/modal');
-  };
+  // const onAddExpense = () => {
+  //   router.push('/addExpense');
+  // };
+  // const onModal = () => {
+  //   router.push('/modal');
+  // };
+  const theme = useTheme();
 
   return (
-    <VStack flex={1}>
-      <StatusBar backgroundColor={COLORS.darkBackground} barStyle={'light-content'} />
+    <VStack
+      flex={1}
+      style={{
+        backgroundColor: theme.colors.primaryColor,
+      }}
+    >
+      <StatusBar backgroundColor={theme.colors.primaryColor} barStyle={'light-content'} />
       <Header title="Home" showBackButton={false} />
       <SummaryCard
         own={178.34}

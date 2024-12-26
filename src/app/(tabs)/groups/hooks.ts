@@ -3,7 +3,6 @@ import { useExpenseStore } from '@/src/stores/expenseStore';
 import { useGroupStore } from '@/src/stores/groupStore';
 import { useSelfStore } from '@/src/stores/selfStore';
 import { faker } from '@faker-js/faker/.';
-import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 import { useShallow } from 'zustand/react/shallow';
@@ -84,21 +83,21 @@ const useGroups = (props?: any) => {
   };
 
   const onPressGroupCard = (group: { avatar: string; id: string; name: string; type: string }) => {
-    router.push({
-      pathname: '/groups/groupDetails',
-      params: {
-        groupId: group?.id,
-      },
-    });
+    // router.push({
+    //   pathname: '/groups/groupDetails',
+    //   params: {
+    //     groupId: group?.id,
+    //   },
+    // });
   };
 
   const onAdd = (groupId: string) => {
-    router.push({
-      pathname: '/addExpense',
-      params: {
-        groupId: groupId,
-      },
-    });
+    // router.push({
+    //   pathname: '/addExpense',
+    //   params: {
+    //     groupId: groupId,
+    //   },
+    // });
   };
 
   return {

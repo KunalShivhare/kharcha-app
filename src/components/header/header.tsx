@@ -1,5 +1,4 @@
 import { AntDesign } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, Text, TextStyle, View } from 'react-native';
 import { COLORS } from '../../providers/theme.style';
@@ -15,7 +14,7 @@ const Header: React.FC<{
     if (onPressback) {
       onPressback();
     } else {
-      router.back();
+      // router.back();
     }
   };
   return (

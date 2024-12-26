@@ -2,7 +2,6 @@ import { useExpenseStore } from '@/src/stores/expenseStore';
 import { useSelfStore } from '@/src/stores/selfStore';
 import { distributeEqualPrice } from '@/src/utilities/expenseUtils';
 import { faker } from '@faker-js/faker/.';
-import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 
@@ -35,7 +34,7 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
       paidBy: '1',
     };
     await addExpense(expense);
-    router.back();
+    // router.back();
   };
 
   const onAddUnequalExpense = async (personWithAmount: any[]) => {
@@ -60,11 +59,11 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
     };
 
     await addExpense(expense);
-    router.back();
+    // router.back();
   };
 
   const onGroupPress = () => {
-    router.push('/modal');
+    // router.push('/modal');
   };
 
   return {
