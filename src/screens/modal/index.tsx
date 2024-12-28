@@ -2,9 +2,9 @@ import GroupList from '@/src/components/groups/groupList';
 import MemberList from '@/src/components/members/mebersList';
 import { Layout } from '@/src/components/themes/globalStyles';
 import { useTheme } from '@/src/components/themes/hooks';
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 import { handleAndroidBackButton, removeAndroidBackButtonHandler } from '@/src/utilities';
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import {
   Animated,
@@ -55,7 +55,7 @@ const CustomModal = () => {
   const { colors } = useTheme();
   const { params } = useRoute();
   const props = params as ICustomModalProps;
-  const navigation = useNavigation();
+  const navigation = useAuthorizeNavigation();
 
   useEffect(() => {
     handleAndroidBackButton(onBackPress);

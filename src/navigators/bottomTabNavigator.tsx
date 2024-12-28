@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from '../app/(tabs)/home';
-import Friends from '../app/(tabs)/friends';
-import Activity from '../app/(tabs)/activity';
-import Account from '../app/(tabs)/account';
+import Activity from '../screens/activity';
+import Account from '../screens/account';
 import { resize } from '../utils/deviceDimentions';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../components/themes/hooks';
 import { COLORS } from '../providers/theme.style';
+import Home from '../screens/home';
+import Friends from '../screens/friends';
 
 export type TabStackParamList = {
   Home: undefined;

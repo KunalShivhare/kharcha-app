@@ -1,11 +1,18 @@
-import { NavigationContainer, ThemeProvider } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AuthProvider from '../providers/AuthProvider';
-import { useSelfStore } from '../stores/selfStore';
-import AuthorizeNavigation from '../navigators/authorizeStack';
-import AppTheme, { DarkTheme, LightTheme } from '../components/themes/apptheme';
+import AuthProvider, { useAuth } from './providers/AuthProvider';
+import { useSelfStore } from './stores/selfStore';
+import AuthorizeNavigation from './navigators/authorizeStack';
+import AppTheme, { DarkTheme, LightTheme } from './components/themes/apptheme';
+import UnauthorizeNavigation from './navigators/unauthorizeStack';
+
+const RootNavigator = () => {
+  const { isAuthenticated } = useAuth();
+
+  return isAuthenticated ? <AuthorizeNavigation /> : <UnauthorizeNavigation />;
+};
 
 const App = () => {
   const { addSelf } = useSelfStore();
@@ -27,7 +34,7 @@ const App = () => {
       <AuthProvider>
         <NavigationContainer>
           <AppTheme.Provider value={theme}>
-            <AuthorizeNavigation />
+            <RootNavigator />
           </AppTheme.Provider>
         </NavigationContainer>
       </AuthProvider>

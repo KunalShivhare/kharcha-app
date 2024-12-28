@@ -1,20 +1,25 @@
+import AppIntroSlider from '@/src/components/appIntroSlider/appIntroSlider';
+import LargeButton from '@/src/components/buttons/largeButton';
+import { useTheme } from '@/src/components/themes/hooks';
+import { useUnauthorizeNavigation } from '@/src/navigators/navigators';
+import { COLORS } from '@/src/providers/theme.style';
+import { resize } from '@/src/utils/deviceDimentions';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import AppIntroSlider from '../../../components/appIntroSlider/appIntroSlider';
-import LargeButton from '../../../components/buttons/largeButton';
-import { COLORS } from '../../../providers/theme.style';
-import { resize } from '../../../utils/deviceDimentions';
+import { StatusBar, StyleSheet, View } from 'react-native';
 
 const Onboarding = () => {
+  const navigation = useUnauthorizeNavigation();
+  const theme = useTheme();
   const handleGetStartedOnPress = () => {
-    // router.push("/signup")
+    navigation.navigate('Signup');
   };
   const handleLoginOnPress = () => {
-    // router.push("/login")
+    navigation.navigate('Login');
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.primaryColor }]}>
+      <StatusBar backgroundColor={theme.colors.primaryColor} barStyle={'light-content'} />
       <AppIntroSlider />
       <View style={styles.doubleCTAContainer}>
         <LargeButton

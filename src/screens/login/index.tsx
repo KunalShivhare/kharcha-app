@@ -1,19 +1,24 @@
+import LargeButton from '@/src/components/buttons/largeButton';
+import Header from '@/src/components/header/header';
+import InputField from '@/src/components/inputs/inputField';
+import { useTheme } from '@/src/components/themes/hooks';
+import DismissKeyboard from '@/src/HOCs/DismissKeyboard';
+import { useUnauthorizeNavigation } from '@/src/navigators/navigators';
+import { COLORS } from '@/src/providers/theme.style';
+import { resize } from '@/src/utils/deviceDimentions';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import DismissKeyboard from '../../../HOCs/DismissKeyboard';
-import LargeButton from '../../../components/buttons/largeButton';
-import Header from '../../../components/header/header';
-import InputField from '../../../components/inputs/inputField';
-import { COLORS } from '../../../providers/theme.style';
-import { resize } from '../../../utils/deviceDimentions';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
 
 const Login = () => {
+  const navigation = useUnauthorizeNavigation();
+  const theme = useTheme();
   const handleOnPressLogin = () => {
-    // router.push("/otpVerification")
+    navigation.navigate('OTPVerification');
   };
   return (
     <DismissKeyboard>
-      <View style={styles.mainContainer}>
+      <View style={[styles.mainContainer, { backgroundColor: theme.colors.primaryColor }]}>
+        <StatusBar backgroundColor={theme.colors.primaryColor} barStyle={'light-content'} />
         <Header title={'Login'} />
         <View style={styles.loginFormContainer}>
           <View style={styles.loginFormFieldContainer}>

@@ -8,11 +8,13 @@ import Button from '../buttons/button';
 import { useGroupStore } from '@/src/stores/groupStore';
 import { gap, Layout, padding } from '../themes/globalStyles';
 import { useShallow } from 'zustand/react/shallow';
-import { useGroups } from '@/src/app/(tabs)/groups/hooks';
+import { useGroups } from '@/src/screens/groups/hooks';
 import EmptyScreen from '../empty/emptyScreen';
 import { useContactStore } from '@/src/stores/contactStore';
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 
 const GroupList = (props: any) => {
+  const navigation = useAuthorizeNavigation();
   const [groups, groupLength] = useGroupStore(
     useShallow((state) => [state.groups, state.groups.length])
   );
@@ -21,17 +23,12 @@ const GroupList = (props: any) => {
 
   const onAdd = () => {
     if (contacts.length) {
-      // router.push({
-      //   pathname: '/contacts/contactList',
-      //   params: {
-      //     headerTitle: 'New Group',
-      //     navigateToScreen: '/groups/createGroup',
-      //   },
-      // });
+      navigation.navigate('ContactList', {
+        headerTitle: 'New Group',
+        navigateToScreen: '/groups/createGroup',
+      });
     } else {
-      // router.push({
-      //   pathname: '/groups/createGroup',
-      // });
+      navigation.navigate('CreateGroup');
     }
   };
 

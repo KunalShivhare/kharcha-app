@@ -1,3 +1,4 @@
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 import { useExpenseStore } from '@/src/stores/expenseStore';
 import { useSelfStore } from '@/src/stores/selfStore';
 import { distributeEqualPrice } from '@/src/utilities/expenseUtils';
@@ -18,6 +19,7 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
   const amountRef = useRef<TextInput>(null);
   const { self } = useSelfStore();
   const { addExpense } = useExpenseStore();
+  const navigation = useAuthorizeNavigation();
 
   const onAddExpense = async (members: []) => {
     if (amount === 0) return;
@@ -34,7 +36,7 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
       paidBy: '1',
     };
     await addExpense(expense);
-    // router.back();
+    navigation.goBack();
   };
 
   const onAddUnequalExpense = async (personWithAmount: any[]) => {
@@ -59,11 +61,11 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
     };
 
     await addExpense(expense);
-    // router.back();
+    navigation.goBack();
   };
 
   const onGroupPress = () => {
-    // router.push('/modal');
+    navigation.navigate('CustomModal');
   };
 
   return {

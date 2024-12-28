@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { Contact } from './types';
 import useBackHandler from '@/src/utilities/useBackHandler';
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 
-const useContacts = ({ navigateToScreen }: { navigateToScreen?: string }) => {
+const useContacts = ({ navigateToScreen }: { navigateToScreen?: any }) => {
   const [
     contacts,
     fetchContacts,
@@ -24,6 +25,7 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: string }) => {
       state.resetSelectedContacts,
     ])
   );
+  const navigation = useAuthorizeNavigation();
 
   const onSelectContact = (contact: Contact) => {
     const index = selectedContacts.findIndex(
@@ -43,14 +45,12 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: string }) => {
   };
 
   const onGoBack = () => {
-    // router.back();
+    navigation.goBack();
     resetSelectedContacts();
   };
 
   const onNext = () => {
-    // router.push({
-    //   pathname: navigateToScreen ?? '/contacts/selectedContactList',
-    // });
+    navigation.navigate(navigateToScreen ?? 'SelectedContactList');
   };
 
   useEffect(() => {

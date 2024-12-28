@@ -20,15 +20,14 @@ import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
 import { useRoute } from '@react-navigation/native';
 import EmptyScreen from '@/src/components/empty/emptyScreen';
-
-interface ContactListProps {
-  headerTitle?: string;
-  navigateToScreen?: string;
-}
+import {
+  AuthorizeNavigationProp,
+  AuthorizeNavigationStackList,
+} from '@/src/navigators/authorizeStack';
 
 const ContactList = () => {
-  const { params } = useRoute();
-  const { headerTitle, navigateToScreen } = params as ContactListProps;
+  const { params } = useRoute<AuthorizeNavigationProp<'ContactList'>>();
+  const { headerTitle, navigateToScreen } = params;
   const {
     contacts,
     selectedContacts,

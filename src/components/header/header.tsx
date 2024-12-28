@@ -3,6 +3,8 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, TextStyle, View } from 'react-native';
 import { COLORS } from '../../providers/theme.style';
 import { resize } from '../../utils/deviceDimentions';
+import { useAuth } from '@/src/providers/AuthProvider';
+import { useAuthorizeNavigation, useUnauthorizeNavigation } from '@/src/navigators/navigators';
 
 const Header: React.FC<{
   title: string;
@@ -10,11 +12,13 @@ const Header: React.FC<{
   onPressback?: () => void;
   showBackButton?: boolean;
 }> = ({ title, titleStyle, onPressback, showBackButton = true }) => {
+  const { isAuthenticated } = useAuth();
+  const navigation = isAuthenticated ? useAuthorizeNavigation() : useUnauthorizeNavigation();
   const handleOnPressBackButton = () => {
     if (onPressback) {
       onPressback();
     } else {
-      // router.back();
+      navigation.goBack();
     }
   };
   return (

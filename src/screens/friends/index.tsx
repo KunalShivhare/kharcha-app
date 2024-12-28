@@ -1,13 +1,15 @@
 import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import React from 'react';
-import { resize } from '../../../utils/deviceDimentions';
 import { faker } from '@faker-js/faker/.';
 import FloatingButton from '@/src/components/buttons/floatingButton';
 import { useFriends } from './hooks';
 import EmptyScreen from '@/src/components/empty/emptyScreen';
 import { Layout } from '@/src/components/themes/globalStyles';
+import { resize } from '@/src/utils/deviceDimentions';
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 
 const Friends = () => {
+  const navigation = useAuthorizeNavigation();
   const { friends } = useFriends();
 
   const renderItem = ({ item, index }: { item: any; index: any }) => {
@@ -79,7 +81,7 @@ const Friends = () => {
           color: '#fff',
         }}
         onPress={() => {
-          router.push('/contacts/contactList');
+          // navigation.navigate('ContactList')
         }}
       />
     </View>

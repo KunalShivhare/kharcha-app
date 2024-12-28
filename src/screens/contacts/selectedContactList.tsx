@@ -11,7 +11,7 @@ import { FlatList, Image, Pressable, StyleSheet, TouchableOpacity, View } from '
 import { useContacts } from './hooks';
 
 const SelectedContactList = () => {
-  const { selectedContacts, onSelectContact, removeContact } = useContacts();
+  const { selectedContacts, onSelectContact, removeContact } = useContacts({});
 
   const contactCard = useCallback(
     ({ item: contact, index }: { item: any; index: number }) => {

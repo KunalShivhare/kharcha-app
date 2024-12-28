@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
 import { create } from 'zustand';
 import * as Contacts from 'expo-contacts';
-import { Contact } from '../app/(tabs)/contacts/types';
+import { Contact } from '../screens/contacts/types';
 
 type CONTACT_STORE = {
   contacts: Array<Contact>;

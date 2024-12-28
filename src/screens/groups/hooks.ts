@@ -1,3 +1,4 @@
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 import { useContactStore } from '@/src/stores/contactStore';
 import { useExpenseStore } from '@/src/stores/expenseStore';
 import { useGroupStore } from '@/src/stores/groupStore';
@@ -25,6 +26,7 @@ const useGroups = (props?: any) => {
       name: 'Other',
     },
   ];
+  const navigation = useAuthorizeNavigation();
   const [groupName, setGroupName] = useState<string>('');
   const [selectedGroupType, setGroupType] = useState<string>('');
   const { createGroup } = useGroupStore();
@@ -67,7 +69,7 @@ const useGroups = (props?: any) => {
 
     createGroup(group);
     reset();
-    router.replace('/home');
+    navigation.replace('BottomTabNavigator');
   };
 
   const onSettleUp = () => {
@@ -83,21 +85,15 @@ const useGroups = (props?: any) => {
   };
 
   const onPressGroupCard = (group: { avatar: string; id: string; name: string; type: string }) => {
-    // router.push({
-    //   pathname: '/groups/groupDetails',
-    //   params: {
-    //     groupId: group?.id,
-    //   },
-    // });
+    navigation.navigate('GroupDetails', {
+      groupId: group?.id,
+    });
   };
 
   const onAdd = (groupId: string) => {
-    // router.push({
-    //   pathname: '/addExpense',
-    //   params: {
-    //     groupId: groupId,
-    //   },
-    // });
+    navigation.navigate('AddExpense', {
+      groupId: groupId,
+    });
   };
 
   return {

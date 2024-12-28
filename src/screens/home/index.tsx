@@ -1,21 +1,20 @@
 import GroupList from '@/src/components/groups/groupList';
 import Header from '@/src/components/header/header';
 import SummaryCard from '@/src/components/home/summaryCard';
-import { COLORS } from '@/src/providers/theme.style';
 import { StatusBar, StyleSheet } from 'react-native';
-import { useAuth } from '../../../providers/AuthProvider';
 import { VStack } from '@/src/components/customUI/VStack';
 import { useHome } from './hooks';
 import { useTheme } from '@/src/components/themes/hooks';
+import { useAuth } from '@/src/providers/AuthProvider';
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
+import Button from '@/src/components/buttons/button';
 
 const Home = () => {
   const {} = useHome();
   const { signOut } = useAuth();
+  const navigation = useAuthorizeNavigation();
   // const onAddExpense = () => {
-  //   router.push('/addExpense');
-  // };
-  // const onModal = () => {
-  //   router.push('/modal');
+  // navigation.navigate('AddExpense', {});
   // };
   const theme = useTheme();
 
@@ -38,8 +37,14 @@ const Home = () => {
       <VStack flex={1}>
         <GroupList />
       </VStack>
-      {/* <Button title="Add Expense" onPress={onAddExpense}></Button>
-      <Button title="logout" onPress={signOut}></Button> */}
+      {/* <Button title="Add Expense" onPress={onAddExpense}></Button> */}
+      {/* <Button
+        textVariant="label3_regular"
+        title="logout"
+        onPress={signOut}
+        type={'Primary'}
+        size={'long'}
+      ></Button> */}
     </VStack>
   );
 };

@@ -20,6 +20,7 @@ import {
   View,
 } from 'react-native';
 import { SPLIT_TYPE, useAddExpense } from './hooks';
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 
 const AddExpense = () => {
   const images = [
@@ -49,38 +50,33 @@ const AddExpense = () => {
   const { expenseSharesWithPersons } = useExpenseShareWithPersonsStore();
   const group = groups.find((group) => group.id === groupId);
   const members = group?.members ?? [];
+  const navigation = useAuthorizeNavigation();
 
   const equalMembers = members;
 
   const GroupListPopup = {
     show: ({ passProps = {} }: { passProps: any }) => {
-      // router.push({
-      //   pathname: '/modal',
-      //   params: {
-      //     cancelOnOutsideClick: true,
-      //     showHeader: false,
-      //     noScrollView: false,
-      //     variant: 'bottom',
-      //     componentKey: 'GroupList',
-      //     ...passProps,
-      //   },
-      // });
+      navigation.navigate('CustomModal', {
+        cancelOnOutsideClick: true,
+        showHeader: false,
+        noScrollView: false,
+        variant: 'bottom',
+        componentKey: 'GroupList',
+        ...passProps,
+      });
     },
   };
 
   const PriceDistribution = {
     show: ({ passProps = {} }: { passProps: any }) => {
-      // router.push({
-      //   pathname: '/modal',
-      //   params: {
-      //     cancelOnOutsideClick: true,
-      //     showHeader: false,
-      //     noScrollView: false,
-      //     variant: 'bottom',
-      //     componentKey: 'MemberList',
-      //     ...passProps,
-      //   },
-      // });
+      navigation.navigate('CustomModal', {
+        cancelOnOutsideClick: true,
+        showHeader: false,
+        noScrollView: false,
+        variant: 'bottom',
+        componentKey: 'MemberList',
+        ...passProps,
+      });
     },
   };
 

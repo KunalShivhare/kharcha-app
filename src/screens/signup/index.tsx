@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import DismissKeyboard from '../../../HOCs/DismissKeyboard';
-import Header from '../../../components/header/header';
-import InputField from '../../../components/inputs/inputField';
-import { resize } from '../../../utils/deviceDimentions';
-import LargeButton from '../../../components/buttons/largeButton';
-import { COLORS } from '../../../providers/theme.style';
+import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import Checkbox from 'expo-checkbox';
+import LargeButton from '@/src/components/buttons/largeButton';
+import InputField from '@/src/components/inputs/inputField';
+import DismissKeyboard from '@/src/HOCs/DismissKeyboard';
+import { COLORS } from '@/src/providers/theme.style';
+import { resize } from '@/src/utils/deviceDimentions';
+import Header from '@/src/components/header/header';
+import { useTheme } from '@/src/components/themes/hooks';
+import { useUnauthorizeNavigation } from '@/src/navigators/navigators';
 
 const Signup = () => {
   const [isChecked, setChecked] = useState<boolean>(false);
+  const theme = useTheme();
+  const navigation = useUnauthorizeNavigation();
   const handleOnPressSignUp = () => {
-    // router.push("/otpVerification")
+    navigation.navigate('OTPVerification');
   };
   return (
     <DismissKeyboard>
-      <View style={styles.mainContainer}>
+      <View style={[styles.mainContainer, { backgroundColor: theme.colors.primaryColor }]}>
+        <StatusBar backgroundColor={theme.colors.primaryColor} barStyle={'light-content'} />
         <Header title={'Sign Up'} />
         <View style={styles.signUpFormContainer}>
           <View style={styles.signUpFormFieldContainer}>

@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import Button from '../buttons/button';
 import InputWithLabel from '../inputs/InputWithLabel';
 import { useExpenseShareWithPersonsStore } from '@/src/stores/expenseShareWithPersons';
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 
 interface DataItem {
   id: string;
@@ -17,6 +18,7 @@ const MemberList = (props: any) => {
   const group = groups.find((group) => group.id === groupId);
   const members = group?.members ?? [];
   const { addExpenseShareWithPersons } = useExpenseShareWithPersonsStore();
+  const navigation = useAuthorizeNavigation();
 
   const [data, setData] = useState<DataItem[]>(
     members.map((member: any, index: any) => ({
@@ -68,7 +70,7 @@ const MemberList = (props: any) => {
       return personArray.push({ ...rest, amount: item.amount });
     });
     addExpenseShareWithPersons(personArray);
-    // router.back();
+    navigation.goBack();
   };
 
   return (

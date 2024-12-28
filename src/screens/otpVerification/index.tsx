@@ -1,38 +1,31 @@
-import React, { useEffect, useState } from "react"
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native"
-import LargeButton from "../../../components/buttons/largeButton"
-import Header from "../../../components/header/header"
-import { COLORS } from "../../../providers/theme.style"
-import { deviceWidth, resize } from "../../../utils/deviceDimentions"
-import InputField from "../../../components/inputs/inputField"
-import { useAuth } from "../../../providers/AuthProvider"
+import React, { useEffect, useState } from 'react';
+import { KeyboardAvoidingView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import LargeButton from '@/src/components/buttons/largeButton';
+import Header from '@/src/components/header/header';
+import InputField from '@/src/components/inputs/inputField';
+import { useAuth } from '@/src/providers/AuthProvider';
+import { COLORS } from '@/src/providers/theme.style';
+import { resize, deviceWidth } from '@/src/utils/deviceDimentions';
+import { useTheme } from '@/src/components/themes/hooks';
 
 const OTPVerification = () => {
-  const [otp, setOtp] = useState<string>("")
-  const { signIn } = useAuth()
+  const [otp, setOtp] = useState<string>('');
+  const { signIn } = useAuth();
+  const theme = useTheme();
 
   useEffect(() => {
     if (Number(otp.length) === 4) {
-      console.log("OTP verified!")
-      signIn()
+      console.log('OTP verified!');
+      signIn();
     }
-  }, [otp])
+  }, [otp]);
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, { backgroundColor: theme.colors.primaryColor }]}>
+      <StatusBar backgroundColor={theme.colors.primaryColor} barStyle={'light-content'} />
       <Header title="Verification" />
-      <ScrollView
-        style={styles.subContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        <KeyboardAvoidingView behavior={"height"}>
+      <ScrollView style={styles.subContainer} showsVerticalScrollIndicator={false}>
+        <KeyboardAvoidingView behavior={'height'}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Enter your Verification Code</Text>
           </View>
@@ -54,7 +47,7 @@ const OTPVerification = () => {
                     <Text style={styles.otp}>{otp[index]}</Text>
                   )}
                 </View>
-              )
+              );
             })}
           </View>
           <View style={styles.timerContainer}>
@@ -68,9 +61,7 @@ const OTPVerification = () => {
             </Text>
           </View>
           <View style={styles.resendOTPContainer}>
-            <Text
-              style={styles.resendOTPText}
-            >{`I didn't received the code? Send again`}</Text>
+            <Text style={styles.resendOTPText}>{`I didn't received the code? Send again`}</Text>
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -78,13 +69,12 @@ const OTPVerification = () => {
         <LargeButton title="Verify" />
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default OTPVerification
+export default OTPVerification;
 
-const styles = StyleSheet.create(
-  {
+const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
@@ -98,7 +88,7 @@ const styles = StyleSheet.create(
   },
   title: {
     fontSize: resize(36),
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: resize(40),
     color: COLORS.light100,
   },
@@ -106,23 +96,22 @@ const styles = StyleSheet.create(
     marginTop: resize(44),
     gap: resize(10),
     paddingVertical: resize(20),
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   otpInput: {
     width: deviceWidth * 0.6,
     // borderWidth: 1,
     // borderColor: "white",
-    position: "absolute",
+    position: 'absolute',
     // padding: resize(20),
     height: resize(50),
-    color: null,
     opacity: 0,
     zIndex: 999,
   },
   otpBox: {
-    alignItems: "center",
-    justifyContent: "center",
-    textAlign: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
     width: resize(40),
     height: resize(40),
   },
@@ -135,9 +124,9 @@ const styles = StyleSheet.create(
   otp: {
     fontSize: resize(32),
     lineHeight: resize(40),
-    fontWeight: "700",
-    alignSelf: "center",
-    color: "white",
+    fontWeight: '700',
+    alignSelf: 'center',
+    color: 'white',
   },
   timerContainer: {
     marginTop: resize(46),
@@ -145,14 +134,14 @@ const styles = StyleSheet.create(
   timerText: {
     color: COLORS.green100,
     fontSize: resize(18),
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: resize(22),
   },
   emailContiner: { marginTop: resize(16) },
   emailText: {
     color: COLORS.light100,
     fontSize: resize(16),
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: resize(20),
   },
   email: {
@@ -164,12 +153,12 @@ const styles = StyleSheet.create(
   resendOTPText: {
     color: COLORS.green100,
     fontSize: resize(16),
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: resize(20),
-    textDecorationLine: "underline",
+    textDecorationLine: 'underline',
   },
   verifyButtonContainer: {
     marginHorizontal: resize(16),
     marginBottom: resize(16),
   },
-})
+});
