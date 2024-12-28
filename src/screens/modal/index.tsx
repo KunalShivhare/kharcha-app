@@ -2,9 +2,11 @@ import GroupList from '@/src/components/groups/groupList';
 import MemberList from '@/src/components/members/mebersList';
 import { Layout } from '@/src/components/themes/globalStyles';
 import { useTheme } from '@/src/components/themes/hooks';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 import { handleAndroidBackButton, removeAndroidBackButtonHandler } from '@/src/utilities';
 import { AntDesign } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import {
   Animated,
@@ -56,6 +58,7 @@ const CustomModal = () => {
   const { params } = useRoute();
   const props = params as ICustomModalProps;
   const navigation = useAuthorizeNavigation();
+  const theme = useTheme();
 
   useEffect(() => {
     handleAndroidBackButton(onBackPress);
@@ -115,7 +118,7 @@ const CustomModal = () => {
   const contentStyle = [
     style.container,
     { paddingBottom: 0 },
-    { backgroundColor: colors.defaultBackground },
+    { backgroundColor: theme.colors.primaryColor },
     childStyle,
   ];
 
@@ -131,51 +134,49 @@ const CustomModal = () => {
   };
 
   return (
-    <>
-      {/* <StatusBarElement statusBarColor={colors.overlay} /> */}
-      <View style={[Layout.container, { backgroundColor: colors.overlay }]}>
-        {
-          <TouchableOpacity
-            style={[
-              Layout.container,
-              parentContainer,
-              variant === MODAL_VARIANT.Center ? style.centerModal : style.bottomModal,
-            ]}
-            activeOpacity={1}
-            onPress={() => {
-              cancelOnOutsideClick && closeModal();
-            }}
-            disabled={disableWrapperTouches}
-          >
-            {!hideClose && (
-              <Pressable
-                onPress={closeModal}
-                style={[style.wrapper, { backgroundColor: colors.defaultText }]}
-              >
-                <AntDesign name="close" size={16} color={'black'} />
-              </Pressable>
-            )}
-            <TouchableWithoutFeedback style={contentStyle} disabled={disableWrapperTouches}>
-              <Animated.View
-                onLayout={onLayout}
-                style={[...contentStyle, { transform: [{ translateY: animationState }] }]}
-              >
-                {noScrollView ? (
-                  <View style={[Layout.container, containerStyle]}>{renderChildren()}</View>
-                ) : (
-                  <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    keyboardShouldPersistTaps="always"
-                  >
-                    {renderChildren()}
-                  </ScrollView>
-                )}
-              </Animated.View>
-            </TouchableWithoutFeedback>
-          </TouchableOpacity>
-        }
-      </View>
-    </>
+    <ThemeWrapper
+      style={{
+        backgroundColor: colors.overlay,
+      }}
+    >
+      {
+        <TouchableOpacity
+          style={[
+            Layout.container,
+            parentContainer,
+            variant === MODAL_VARIANT.Center ? style.centerModal : style.bottomModal,
+          ]}
+          activeOpacity={1}
+          onPress={() => {
+            cancelOnOutsideClick && closeModal();
+          }}
+          disabled={disableWrapperTouches}
+        >
+          {!hideClose && (
+            <Pressable
+              onPress={closeModal}
+              style={[style.wrapper, { backgroundColor: theme.colors.primaryColor }]}
+            >
+              <AntDesign name="close" size={16} color={theme.colors.primaryText} />
+            </Pressable>
+          )}
+          <TouchableWithoutFeedback style={contentStyle} disabled={disableWrapperTouches}>
+            <Animated.View
+              onLayout={onLayout}
+              style={[...contentStyle, { transform: [{ translateY: animationState }] }]}
+            >
+              {noScrollView ? (
+                <View style={[Layout.container, containerStyle]}>{renderChildren()}</View>
+              ) : (
+                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
+                  {renderChildren()}
+                </ScrollView>
+              )}
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        </TouchableOpacity>
+      }
+    </ThemeWrapper>
   );
 };
 

@@ -4,6 +4,8 @@ import { HStack } from '@/src/components/customUI/HStack';
 import Separator from '@/src/components/customUI/Separator';
 import { VStack } from '@/src/components/customUI/VStack';
 import Header from '@/src/components/header/header';
+import { Layout } from '@/src/components/themes/globalStyles';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 import { COLORS } from '@/src/providers/theme.style';
 import { useSelfStore } from '@/src/stores/selfStore';
 import Feather from '@expo/vector-icons/Feather';
@@ -72,19 +74,21 @@ const Account = () => {
     },
   ];
   return (
-    <View style={styles.flex1}>
-      <Header title="Account" />
-      <ScrollView>
-        <VStack style={styles.container}>
-          <HStack style={styles.labelContainer}>
-            <AvatarWithLabel uri={self?.image} label={self?.name} subLabel={self?.email} />
-            <Feather name="edit" size={24} color={COLORS.primary} />
-          </HStack>
-          <Separator />
-          <AccountList featuresList={featuresList} />
-        </VStack>
-      </ScrollView>
-    </View>
+    <ThemeWrapper>
+      <View style={Layout.container}>
+        <Header title="Account" />
+        <ScrollView>
+          <VStack style={styles.container}>
+            <HStack style={styles.labelContainer}>
+              <AvatarWithLabel uri={self?.image} label={self?.name} subLabel={self?.email} />
+              <Feather name="edit" size={24} color={COLORS.primary} />
+            </HStack>
+            <Separator />
+            <AccountList featuresList={featuresList} />
+          </VStack>
+        </ScrollView>
+      </View>
+    </ThemeWrapper>
   );
 };
 

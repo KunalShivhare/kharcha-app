@@ -7,6 +7,7 @@ import EmptyScreen from '@/src/components/empty/emptyScreen';
 import { Layout } from '@/src/components/themes/globalStyles';
 import { resize } from '@/src/utils/deviceDimentions';
 import { useAuthorizeNavigation } from '@/src/navigators/navigators';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
 const Friends = () => {
   const navigation = useAuthorizeNavigation();
@@ -46,45 +47,47 @@ const Friends = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          paddingHorizontal: resize(16),
-          paddingVertical: resize(8),
-        }}
-      >
-        <Text
+    <ThemeWrapper>
+      <View style={styles.container}>
+        <View
           style={{
-            color: '#fff',
-            fontSize: resize(18),
+            paddingHorizontal: resize(16),
+            paddingVertical: resize(8),
           }}
         >
-          Friends
-        </Text>
-      </View>
-      {friends.length > 0 ? (
-        <FlatList
-          data={friends}
-          keyExtractor={(item, index) => String(index)}
-          renderItem={renderItem}
-        />
-      ) : (
-        <View style={[Layout.container, Layout.alignCenter, Layout.justifyCenter]}>
-          <EmptyScreen />
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: resize(18),
+            }}
+          >
+            Friends
+          </Text>
         </View>
-      )}
-      <FloatingButton
-        text="+ Add Friend"
-        textStyle={{
-          fontSize: 14,
-          fontWeight: 'bold',
-          color: '#fff',
-        }}
-        onPress={() => {
-          // navigation.navigate('ContactList')
-        }}
-      />
-    </View>
+        {friends.length > 0 ? (
+          <FlatList
+            data={friends}
+            keyExtractor={(item, index) => String(index)}
+            renderItem={renderItem}
+          />
+        ) : (
+          <View style={[Layout.container, Layout.alignCenter, Layout.justifyCenter]}>
+            <EmptyScreen />
+          </View>
+        )}
+        <FloatingButton
+          text="+ Add Friend"
+          textStyle={{
+            fontSize: 14,
+            fontWeight: 'bold',
+            color: '#fff',
+          }}
+          onPress={() => {
+            // navigation.navigate('ContactList')
+          }}
+        />
+      </View>
+    </ThemeWrapper>
   );
 };
 

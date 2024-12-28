@@ -1,12 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, useColorScheme } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthProvider, { useAuth } from './providers/AuthProvider';
 import { useSelfStore } from './stores/selfStore';
 import AuthorizeNavigation from './navigators/authorizeStack';
-import AppTheme, { DarkTheme, LightTheme } from './components/themes/apptheme';
+import AppTheme, {
+  LightTheme as CustomLightTheme,
+  DarkTheme as CustomDarkTheme,
+} from './components/themes/apptheme';
 import UnauthorizeNavigation from './navigators/unauthorizeStack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RootNavigator = () => {
   const { isAuthenticated } = useAuth();
@@ -27,7 +30,7 @@ const App = () => {
       email: 'kunalshivharesucks@phub.com',
     });
   }, []);
-  const [theme] = useState(useColorScheme() === 'light' ? LightTheme : DarkTheme);
+  const [theme] = useState(useColorScheme() == 'light' ? CustomLightTheme : CustomDarkTheme);
 
   return (
     <SafeAreaView style={StyleSheet.absoluteFill}>

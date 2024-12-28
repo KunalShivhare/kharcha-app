@@ -8,6 +8,7 @@ import { useTheme } from '@/src/components/themes/hooks';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 import Button from '@/src/components/buttons/button';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
 const Home = () => {
   const {} = useHome();
@@ -19,33 +20,29 @@ const Home = () => {
   const theme = useTheme();
 
   return (
-    <VStack
-      flex={1}
-      style={{
-        backgroundColor: theme.colors.primaryColor,
-      }}
-    >
-      <StatusBar backgroundColor={theme.colors.primaryColor} barStyle={'light-content'} />
-      <Header title="Home" showBackButton={false} />
-      <SummaryCard
-        own={178.34}
-        owed={320.87}
-        onBalance={undefined}
-        onViewDetails={undefined}
-        onSettleUp={undefined}
-      />
+    <ThemeWrapper>
       <VStack flex={1}>
-        <GroupList />
-      </VStack>
-      {/* <Button title="Add Expense" onPress={onAddExpense}></Button> */}
-      {/* <Button
+        <Header title="Home" showBackButton={false} />
+        <SummaryCard
+          own={178.34}
+          owed={320.87}
+          onBalance={undefined}
+          onViewDetails={undefined}
+          onSettleUp={undefined}
+        />
+        <VStack flex={1}>
+          <GroupList />
+        </VStack>
+        {/* <Button title="Add Expense" onPress={onAddExpense}></Button> */}
+        {/* <Button
         textVariant="label3_regular"
         title="logout"
         onPress={signOut}
         type={'Primary'}
         size={'long'}
       ></Button> */}
-    </VStack>
+      </VStack>
+    </ThemeWrapper>
   );
 };
 

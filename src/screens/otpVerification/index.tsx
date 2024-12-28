@@ -6,12 +6,11 @@ import InputField from '@/src/components/inputs/inputField';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { COLORS } from '@/src/providers/theme.style';
 import { resize, deviceWidth } from '@/src/utils/deviceDimentions';
-import { useTheme } from '@/src/components/themes/hooks';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
 const OTPVerification = () => {
   const [otp, setOtp] = useState<string>('');
   const { signIn } = useAuth();
-  const theme = useTheme();
 
   useEffect(() => {
     if (Number(otp.length) === 4) {
@@ -21,54 +20,55 @@ const OTPVerification = () => {
   }, [otp]);
 
   return (
-    <View style={[styles.mainContainer, { backgroundColor: theme.colors.primaryColor }]}>
-      <StatusBar backgroundColor={theme.colors.primaryColor} barStyle={'light-content'} />
-      <Header title="Verification" />
-      <ScrollView style={styles.subContainer} showsVerticalScrollIndicator={false}>
-        <KeyboardAvoidingView behavior={'height'}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>Enter your Verification Code</Text>
-          </View>
-          <View style={styles.otpContainer}>
-            <InputField
-              style={styles.otpInput}
-              maxLength={4}
-              keyboardType="decimal-pad"
-              value={otp}
-              onChangeText={(text) => setOtp(text)}
-            ></InputField>
+    <ThemeWrapper>
+      <View style={[styles.mainContainer]}>
+        <Header title="Verification" />
+        <ScrollView style={styles.subContainer} showsVerticalScrollIndicator={false}>
+          <KeyboardAvoidingView behavior={'height'}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Enter your Verification Code</Text>
+            </View>
+            <View style={styles.otpContainer}>
+              <InputField
+                style={styles.otpInput}
+                maxLength={4}
+                keyboardType="decimal-pad"
+                value={otp}
+                onChangeText={(text) => setOtp(text)}
+              ></InputField>
 
-            {Array.from({ length: 4 }).map((item, index) => {
-              return (
-                <View key={index} style={styles.otpBox}>
-                  {!otp[index] ? (
-                    <Text style={styles.dot}></Text>
-                  ) : (
-                    <Text style={styles.otp}>{otp[index]}</Text>
-                  )}
-                </View>
-              );
-            })}
-          </View>
-          <View style={styles.timerContainer}>
-            <Text style={styles.timerText}>04:59</Text>
-          </View>
-          <View style={styles.emailContiner}>
-            <Text style={styles.emailText}>
-              We send verification code to your email
-              <Text style={styles.email}>{` ema*****@gmail.com. `}</Text>
-              You can check your inbox.
-            </Text>
-          </View>
-          <View style={styles.resendOTPContainer}>
-            <Text style={styles.resendOTPText}>{`I didn't received the code? Send again`}</Text>
-          </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
-      <View style={styles.verifyButtonContainer}>
-        <LargeButton title="Verify" />
+              {Array.from({ length: 4 }).map((item, index) => {
+                return (
+                  <View key={index} style={styles.otpBox}>
+                    {!otp[index] ? (
+                      <Text style={styles.dot}></Text>
+                    ) : (
+                      <Text style={styles.otp}>{otp[index]}</Text>
+                    )}
+                  </View>
+                );
+              })}
+            </View>
+            <View style={styles.timerContainer}>
+              <Text style={styles.timerText}>04:59</Text>
+            </View>
+            <View style={styles.emailContiner}>
+              <Text style={styles.emailText}>
+                We send verification code to your email
+                <Text style={styles.email}>{` ema*****@gmail.com. `}</Text>
+                You can check your inbox.
+              </Text>
+            </View>
+            <View style={styles.resendOTPContainer}>
+              <Text style={styles.resendOTPText}>{`I didn't received the code? Send again`}</Text>
+            </View>
+          </KeyboardAvoidingView>
+        </ScrollView>
+        <View style={styles.verifyButtonContainer}>
+          <LargeButton title="Verify" />
+        </View>
       </View>
-    </View>
+    </ThemeWrapper>
   );
 };
 

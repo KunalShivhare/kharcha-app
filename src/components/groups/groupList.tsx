@@ -12,12 +12,14 @@ import { useGroups } from '@/src/screens/groups/hooks';
 import EmptyScreen from '../empty/emptyScreen';
 import { useContactStore } from '@/src/stores/contactStore';
 import { useAuthorizeNavigation } from '@/src/navigators/navigators';
+import { useTheme } from '../themes/hooks';
 
 const GroupList = (props: any) => {
   const navigation = useAuthorizeNavigation();
   const [groups, groupLength] = useGroupStore(
     useShallow((state) => [state.groups, state.groups.length])
   );
+  const theme = useTheme();
   const contacts = useContactStore((state) => state.contacts);
   const { onPressGroupCard } = useGroups();
 
@@ -25,7 +27,7 @@ const GroupList = (props: any) => {
     if (contacts.length) {
       navigation.navigate('ContactList', {
         headerTitle: 'New Group',
-        navigateToScreen: '/groups/createGroup',
+        navigateToScreen: 'CreateGroup',
       });
     } else {
       navigation.navigate('CreateGroup');
@@ -35,7 +37,7 @@ const GroupList = (props: any) => {
   const renderHeader = ({ showButton }: { showButton: boolean }) => {
     return (
       <HStack style={[Layout.spaceBetween, Layout.alignCenter]}>
-        <Text variant={'heading3_semibold'} fontColor="white">
+        <Text variant={'heading3_semibold'} fontColor={theme.colors.primaryText}>
           Groups
         </Text>
         {showButton && (

@@ -20,10 +20,8 @@ import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
 import { useRoute } from '@react-navigation/native';
 import EmptyScreen from '@/src/components/empty/emptyScreen';
-import {
-  AuthorizeNavigationProp,
-  AuthorizeNavigationStackList,
-} from '@/src/navigators/authorizeStack';
+import { AuthorizeNavigationProp } from '@/src/navigators/authorizeStack';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
 const ContactList = () => {
   const { params } = useRoute<AuthorizeNavigationProp<'ContactList'>>();
@@ -71,46 +69,48 @@ const ContactList = () => {
   const memoizedContactCard = useMemo(() => contactCard, [contactCard]);
 
   return (
-    <View style={[Layout.container]}>
-      <Header title={headerTitle ?? 'Contacts'} onPressback={onGoBack} />
-      {!loadingContact && contacts.length > 0 && (
-        <>
-          <VStack style={[padding.h16, padding.v12, Layout.container]}>
-            <Text>From your contacts</Text>
-            <FlatList
-              data={contacts}
-              contentContainerStyle={{ paddingTop: 16 }}
-              keyExtractor={(item, index) => item?.phoneNumber ?? index.toString()}
-              renderItem={memoizedContactCard}
-              initialNumToRender={10}
-              maxToRenderPerBatch={50}
-              windowSize={9}
-            />
-          </VStack>
-          {selectedContacts.length > 0 && (
-            <View style={[padding.v16, padding.h16]}>
-              <TouchableOpacity style={styles.buttonContainer} onPress={onNext}>
-                <Text style={styles.title}>Next</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </>
-      )}
-      {loadingContact && (
-        <ScrollView
-          contentContainerStyle={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          <ActivityIndicator size="large" color="white" />
-          <Text variant="label2_semibold">Loading contacts...</Text>
-        </ScrollView>
-      )}
-      {contacts.length === 0 && !loadingContact && <EmptyScreen />}
-    </View>
+    <ThemeWrapper>
+      <View style={[Layout.container]}>
+        <Header title={headerTitle ?? 'Contacts'} onPressback={onGoBack} />
+        {!loadingContact && contacts.length > 0 && (
+          <>
+            <VStack style={[padding.h16, padding.v12, Layout.container]}>
+              <Text>From your contacts</Text>
+              <FlatList
+                data={contacts}
+                contentContainerStyle={{ paddingTop: 16 }}
+                keyExtractor={(item, index) => item?.phoneNumber ?? index.toString()}
+                renderItem={memoizedContactCard}
+                initialNumToRender={10}
+                maxToRenderPerBatch={50}
+                windowSize={9}
+              />
+            </VStack>
+            {selectedContacts.length > 0 && (
+              <View style={[padding.v16, padding.h16]}>
+                <TouchableOpacity style={styles.buttonContainer} onPress={onNext}>
+                  <Text style={styles.title}>Next</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </>
+        )}
+        {loadingContact && (
+          <ScrollView
+            contentContainerStyle={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            <ActivityIndicator size="large" color="white" />
+            <Text variant="label2_semibold">Loading contacts...</Text>
+          </ScrollView>
+        )}
+        {contacts.length === 0 && !loadingContact && <EmptyScreen />}
+      </View>
+    </ThemeWrapper>
   );
 };
 

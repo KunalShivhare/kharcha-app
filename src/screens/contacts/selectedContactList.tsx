@@ -9,6 +9,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React, { useCallback, useMemo } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useContacts } from './hooks';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
 const SelectedContactList = () => {
   const { selectedContacts, onSelectContact, removeContact } = useContacts({});
@@ -48,27 +49,29 @@ const SelectedContactList = () => {
   const memoizedContactCard = useMemo(() => contactCard, [contactCard]);
 
   return (
-    <View style={[Layout.container]}>
-      <Header title="Contacts" />
-      <>
-        <VStack style={[padding.h16, padding.v12, Layout.container]}>
-          <FlatList
-            data={selectedContacts}
-            contentContainerStyle={{ paddingTop: 16 }}
-            keyExtractor={(item, index) => item?.phoneNumber ?? index.toString()}
-            renderItem={memoizedContactCard}
-            initialNumToRender={10}
-            maxToRenderPerBatch={50}
-            windowSize={9}
-          />
-        </VStack>
-        <View style={[padding.v16, padding.h16]}>
-          <TouchableOpacity style={styles.buttonContainer}>
-            <Text style={styles.title}>Done</Text>
-          </TouchableOpacity>
-        </View>
-      </>
-    </View>
+    <ThemeWrapper>
+      <View style={[Layout.container]}>
+        <Header title="Contacts" />
+        <>
+          <VStack style={[padding.h16, padding.v12, Layout.container]}>
+            <FlatList
+              data={selectedContacts}
+              contentContainerStyle={{ paddingTop: 16 }}
+              keyExtractor={(item, index) => item?.phoneNumber ?? index.toString()}
+              renderItem={memoizedContactCard}
+              initialNumToRender={10}
+              maxToRenderPerBatch={50}
+              windowSize={9}
+            />
+          </VStack>
+          <View style={[padding.v16, padding.h16]}>
+            <TouchableOpacity style={styles.buttonContainer}>
+              <Text style={styles.title}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      </View>
+    </ThemeWrapper>
   );
 };
 

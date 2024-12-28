@@ -7,60 +7,60 @@ import DismissKeyboard from '@/src/HOCs/DismissKeyboard';
 import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
 import Header from '@/src/components/header/header';
-import { useTheme } from '@/src/components/themes/hooks';
 import { useUnauthorizeNavigation } from '@/src/navigators/navigators';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
 const Signup = () => {
   const [isChecked, setChecked] = useState<boolean>(false);
-  const theme = useTheme();
   const navigation = useUnauthorizeNavigation();
   const handleOnPressSignUp = () => {
     navigation.navigate('OTPVerification');
   };
   return (
-    <DismissKeyboard>
-      <View style={[styles.mainContainer, { backgroundColor: theme.colors.primaryColor }]}>
-        <StatusBar backgroundColor={theme.colors.primaryColor} barStyle={'light-content'} />
-        <Header title={'Sign Up'} />
-        <View style={styles.signUpFormContainer}>
-          <View style={styles.signUpFormFieldContainer}>
-            <InputField placeholder="Mobile Number" keyboardType="decimal-pad" />
-            <InputField placeholder="Email" />
-            <InputField
-              placeholder="Password"
-              autoCapitalize="none"
-              spellCheck={false}
-              secureTextEntry={true}
-            />
-          </View>
-          <View style={styles.signUpfooterContainer}>
-            <View style={styles.signUpAgreementContainer}>
-              <Checkbox
-                style={styles.checkbox}
-                value={isChecked}
-                onValueChange={setChecked}
-                color={isChecked ? COLORS.green100 : undefined}
+    <ThemeWrapper>
+      <DismissKeyboard>
+        <View style={[styles.mainContainer]}>
+          <Header title={'Sign Up'} />
+          <View style={styles.signUpFormContainer}>
+            <View style={styles.signUpFormFieldContainer}>
+              <InputField placeholder="Mobile Number" keyboardType="decimal-pad" />
+              <InputField placeholder="Email" />
+              <InputField
+                placeholder="Password"
+                autoCapitalize="none"
+                spellCheck={false}
+                secureTextEntry={true}
               />
-              <View style={styles.signUpAgreementTextContainer}>
-                <Text style={styles.signUpAgreementText}>
-                  {`By signing up, you agree to the `}
-                  <Text style={styles.green100}>{`Terms of Service and Privacy Policy`}</Text>
+            </View>
+            <View style={styles.signUpfooterContainer}>
+              <View style={styles.signUpAgreementContainer}>
+                <Checkbox
+                  style={styles.checkbox}
+                  value={isChecked}
+                  onValueChange={setChecked}
+                  color={isChecked ? COLORS.green100 : undefined}
+                />
+                <View style={styles.signUpAgreementTextContainer}>
+                  <Text style={styles.signUpAgreementText}>
+                    {`By signing up, you agree to the `}
+                    <Text style={styles.green100}>{`Terms of Service and Privacy Policy`}</Text>
+                  </Text>
+                </View>
+              </View>
+              <View>
+                <LargeButton title="Sign Up" onPress={handleOnPressSignUp} />
+              </View>
+              <View style={styles.loginTextContainer}>
+                <Text style={styles.loginText}>
+                  {`Already have an account? `}
+                  {/* <Link href={"/login"} style={styles.login}>{`Login`}</Link> */}
                 </Text>
               </View>
             </View>
-            <View>
-              <LargeButton title="Sign Up" onPress={handleOnPressSignUp} />
-            </View>
-            <View style={styles.loginTextContainer}>
-              <Text style={styles.loginText}>
-                {`Already have an account? `}
-                {/* <Link href={"/login"} style={styles.login}>{`Login`}</Link> */}
-              </Text>
-            </View>
           </View>
         </View>
-      </View>
-    </DismissKeyboard>
+      </DismissKeyboard>
+    </ThemeWrapper>
   );
 };
 

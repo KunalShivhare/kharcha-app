@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import { SPLIT_TYPE, useAddExpense } from './hooks';
 import { useAuthorizeNavigation } from '@/src/navigators/navigators';
+import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
 const AddExpense = () => {
   const images = [
@@ -108,97 +109,101 @@ const AddExpense = () => {
   const isAddExpenseDisabled = !description || !amount || amount === 0;
 
   return (
-    <View style={styles.container}>
-      <Header title={'Add Expense'} />
-      <ScrollView
-        style={styles.subContainer}
-        contentContainerStyle={{
-          alignItems: 'center',
-        }}
-      >
-        <>
-          <Pressable onPress={() => GroupListPopup.show({ passProps: {} })}>
-            <HStack style={styles.groupContainer}>
-              <HStack style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Image source={{ uri: faker.image.avatar() }} style={styles.avatar} />
-                <Text style={styles.groupName}>{faker.word.noun() + ' ' + faker.word.noun()}</Text>
-              </HStack>
-              <Entypo name="chevron-down" size={resize(24)} color={COLORS.primary} />
-            </HStack>
-          </Pressable>
-          <View style={styles.splitGroup}>
-            <ImageGroup imageHeight={resize(48)} imageWidth={resize(48)} images={images} />
-          </View>
-          <VStack style={styles.gap8}>
-            <VStack style={[styles.descriptionContainer]}>
-              <Text style={[styles.textWhite, styles.for]}>For</Text>
-              <InputField
-                placeholder="Enter a description"
-                style={styles.descriptionTextInput}
-                value={description ? String(description) : ''}
-                onChangeText={(value) => setDescription(value)}
-              />
-            </VStack>
-            <VStack style={[styles.amountContainer]}>
-              <Text style={[styles.amountText]}>Amount</Text>
-              <InputField
-                inputRef={amountRef}
-                placeholder="Enter amount"
-                style={[styles.amountTextInput]}
-                value={amount ? String(amount) : ''}
-                onChangeText={(value) => setAmount(Number(value))}
-                keyboardType="decimal-pad"
-                placeholderTextColor={COLORS.dark25}
-              />
-            </VStack>
-          </VStack>
-          <VStack style={styles.splitTypeContainer}>
-            {Object.values(SPLIT_TYPE).map((item) => {
-              return (
-                <Pressable
-                  style={[
-                    styles.splitTypeItem,
-                    { backgroundColor: item === splitType ? '#101010' : undefined },
-                  ]}
-                  onPress={() => handleSetUnequally(item)}
-                  key={item}
-                >
-                  <Text
-                    style={[
-                      styles.splitTypeText,
-                      { color: item === splitType ? '#1cc29f' : '#fefefe' },
-                    ]}
-                  >
-                    {item}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </VStack>
-          <VStack style={[styles.descriptionContainer, styles.paidByHeadingContainer]}>
-            <Text style={styles.textWhite}>Paid by</Text>
-            <HStack style={styles.paidByContainer}>
-              <View style={styles.groupAvatar}>
-                <Image source={{ uri: faker.image.avatar() }} style={styles.avatar} />
-              </View>
-              <Text style={styles.paidText}>You</Text>
-              <View style={styles.downArrow}>
-                <Entypo name="chevron-down" size={resize(28)} color={COLORS.primary} />
-              </View>
-            </HStack>
-          </VStack>
-        </>
-      </ScrollView>
-      <View style={styles.padding16}>
-        <TouchableOpacity
-          disabled={isAddExpenseDisabled}
-          style={styles.buttonContainer}
-          onPress={() => handleAddExpense()}
+    <ThemeWrapper>
+      <View style={styles.container}>
+        <Header title={'Add Expense'} />
+        <ScrollView
+          style={styles.subContainer}
+          contentContainerStyle={{
+            alignItems: 'center',
+          }}
         >
-          <Text style={styles.title}>Done</Text>
-        </TouchableOpacity>
+          <>
+            <Pressable onPress={() => GroupListPopup.show({ passProps: {} })}>
+              <HStack style={styles.groupContainer}>
+                <HStack style={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <Image source={{ uri: faker.image.avatar() }} style={styles.avatar} />
+                  <Text style={styles.groupName}>
+                    {faker.word.noun() + ' ' + faker.word.noun()}
+                  </Text>
+                </HStack>
+                <Entypo name="chevron-down" size={resize(24)} color={COLORS.primary} />
+              </HStack>
+            </Pressable>
+            <View style={styles.splitGroup}>
+              <ImageGroup imageHeight={resize(48)} imageWidth={resize(48)} images={images} />
+            </View>
+            <VStack style={styles.gap8}>
+              <VStack style={[styles.descriptionContainer]}>
+                <Text style={[styles.textWhite, styles.for]}>For</Text>
+                <InputField
+                  placeholder="Enter a description"
+                  style={styles.descriptionTextInput}
+                  value={description ? String(description) : ''}
+                  onChangeText={(value) => setDescription(value)}
+                />
+              </VStack>
+              <VStack style={[styles.amountContainer]}>
+                <Text style={[styles.amountText]}>Amount</Text>
+                <InputField
+                  inputRef={amountRef}
+                  placeholder="Enter amount"
+                  style={[styles.amountTextInput]}
+                  value={amount ? String(amount) : ''}
+                  onChangeText={(value) => setAmount(Number(value))}
+                  keyboardType="decimal-pad"
+                  placeholderTextColor={COLORS.dark25}
+                />
+              </VStack>
+            </VStack>
+            <VStack style={styles.splitTypeContainer}>
+              {Object.values(SPLIT_TYPE).map((item) => {
+                return (
+                  <Pressable
+                    style={[
+                      styles.splitTypeItem,
+                      { backgroundColor: item === splitType ? '#101010' : undefined },
+                    ]}
+                    onPress={() => handleSetUnequally(item)}
+                    key={item}
+                  >
+                    <Text
+                      style={[
+                        styles.splitTypeText,
+                        { color: item === splitType ? '#1cc29f' : '#fefefe' },
+                      ]}
+                    >
+                      {item}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </VStack>
+            <VStack style={[styles.descriptionContainer, styles.paidByHeadingContainer]}>
+              <Text style={styles.textWhite}>Paid by</Text>
+              <HStack style={styles.paidByContainer}>
+                <View style={styles.groupAvatar}>
+                  <Image source={{ uri: faker.image.avatar() }} style={styles.avatar} />
+                </View>
+                <Text style={styles.paidText}>You</Text>
+                <View style={styles.downArrow}>
+                  <Entypo name="chevron-down" size={resize(28)} color={COLORS.primary} />
+                </View>
+              </HStack>
+            </VStack>
+          </>
+        </ScrollView>
+        <View style={styles.padding16}>
+          <TouchableOpacity
+            disabled={isAddExpenseDisabled}
+            style={styles.buttonContainer}
+            onPress={() => handleAddExpense()}
+          >
+            <Text style={styles.title}>Done</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ThemeWrapper>
   );
 };
 
@@ -207,7 +212,6 @@ export default AddExpense;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#101010',
   },
   subContainer: {
     flex: 1,

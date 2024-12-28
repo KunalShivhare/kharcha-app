@@ -36,12 +36,12 @@ export type AuthorizeNavigationProp<RouteName extends keyof AuthorizeNavigationS
   RouteProp<AuthorizeNavigationStackList, RouteName>;
 
 const AuthorizeNavigationStack = createStackNavigator<AuthorizeNavigationStackList>();
-
 const AuthorizeNavigation = () => {
   return (
     <AuthorizeNavigationStack.Navigator
       screenOptions={{
         headerShown: false,
+        animation: 'slide_from_right',
       }}
     >
       <AuthorizeNavigationStack.Screen name="BottomTabNavigator" component={BottomTabNavigator} />
@@ -54,7 +54,7 @@ const AuthorizeNavigation = () => {
         component={CustomModal}
         options={{
           presentation: 'transparentModal',
-          animation: 'slide_from_bottom',
+          animation: 'fade_from_bottom',
         }}
       />
       <AuthorizeNavigationStack.Screen
@@ -62,7 +62,6 @@ const AuthorizeNavigation = () => {
         component={AddExpense}
         options={{
           presentation: 'modal',
-          animation: 'fade_from_bottom',
         }}
       />
     </AuthorizeNavigationStack.Navigator>
