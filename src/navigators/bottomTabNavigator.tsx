@@ -6,7 +6,7 @@ import Account from '../app/(tabs)/account';
 import { resize } from '../utils/deviceDimentions';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '../components/themes/hooks';
-import { View } from 'react-native';
+import { COLORS } from '../providers/theme.style';
 
 export type TabStackParamList = {
   Home: undefined;
@@ -48,6 +48,7 @@ const BottomTabNavigator = () => {
           display: hideTabBarRoutes.includes(pathName) ? 'none' : 'flex',
           backgroundColor: theme.colors.primaryColor,
         },
+        tabBarActiveTintColor: COLORS.primary,
       }}
     >
       <Tab.Screen
