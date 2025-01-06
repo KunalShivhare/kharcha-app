@@ -1,5 +1,5 @@
 import { AntDesign } from '@expo/vector-icons';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Pressable, StyleSheet, Text, TextStyle, View } from 'react-native';
 import { COLORS } from '../../providers/theme.style';
 import { resize } from '../../utils/deviceDimentions';
@@ -11,7 +11,8 @@ const Header: React.FC<{
   titleStyle?: TextStyle;
   onPressback?: () => void;
   showBackButton?: boolean;
-}> = ({ title, titleStyle, onPressback, showBackButton = true }) => {
+  customRightElement?: ReactElement;
+}> = ({ title, titleStyle, onPressback, showBackButton = true, customRightElement }) => {
   const { isAuthenticated } = useAuth();
   const navigation = isAuthenticated ? useAuthorizeNavigation() : useUnauthorizeNavigation();
   const handleOnPressBackButton = () => {
@@ -29,11 +30,18 @@ const Header: React.FC<{
             <AntDesign name="arrowleft" size={resize(32)} color="white" />
           </Pressable>
         ) : (
-          <View style={styles.backButtonContainer}></View>
+          <View style={styles.flex10Percent}></View>
         )}
         <View style={styles.titleContainer}>
           <Text style={[styles.title, titleStyle]}>{title}</Text>
         </View>
+        {customRightElement ? (
+          <View style={[styles.flex10Percent, styles.customRightElementContainer]}>
+            {customRightElement}
+          </View>
+        ) : (
+          <View style={styles.flex10Percent}></View>
+        )}
       </View>
     </View>
   );
@@ -53,11 +61,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: resize(16),
   },
+  flex10Percent: {
+    flex: 0.1,
+  },
   backButtonContainer: {
     flex: 0.1,
   },
+  customRightElementContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   titleContainer: {
-    flex: 0.8,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     height: resize(64),
