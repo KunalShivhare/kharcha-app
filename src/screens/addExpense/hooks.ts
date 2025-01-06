@@ -41,6 +41,7 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
   }, [group]);
 
   const onEndEditing = () => {
+    if (splitType !== SPLIT_TYPE.EQUALLY) return;
     const { persons }: { persons: any } = distributeEqualPrice(amount ?? 0, membersList);
     setMembersList([...persons]);
   };
