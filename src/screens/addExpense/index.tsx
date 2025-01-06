@@ -319,7 +319,7 @@ const AddExpense = () => {
                 },
               ]}
             >
-              {[...membersList, ...membersList].map((member, index) => {
+              {membersList.map((member, index) => {
                 return (
                   <HStack
                     key={String(member?.phoneNumber) + index}
