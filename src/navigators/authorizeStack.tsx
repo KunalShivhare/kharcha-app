@@ -15,6 +15,7 @@ export type AuthorizeNavigationStackList = {
   ContactList: {
     headerTitle?: string;
     navigateToScreen?: string;
+    groupId?: string;
   };
   CreateGroup: {
     groupId?: string;

@@ -20,6 +20,7 @@ const useGroupStore = create<GROUP_STORE>((set, get) => ({
     }));
   },
   getGroup: (groupId: string) => {
+    if (groupId === '') return;
     const state = get();
     return state.groups.find((group) => group.id === groupId);
   },

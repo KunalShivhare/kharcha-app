@@ -10,7 +10,14 @@ const useGroupSetting = ({ groupId }: { groupId: string }) => {
       groupId: groupId,
     });
   };
-  return { currentGroup, onEditGroup };
+
+  const onAddPeople = () => {
+    navigation.navigate('ContactList', {
+      groupId: groupId,
+    });
+  };
+
+  return { currentGroup, onEditGroup, onAddPeople };
 };
 
 export { useGroupSetting };

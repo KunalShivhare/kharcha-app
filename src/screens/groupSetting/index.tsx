@@ -19,7 +19,7 @@ import { useGroupSetting } from './hooks';
 const GroupSetting = () => {
   const { params } = useRoute<AuthorizeNavigationProp<'GroupDetails'>>();
   const { groupId } = params;
-  const { currentGroup, onEditGroup } = useGroupSetting({
+  const { currentGroup, onEditGroup, onAddPeople } = useGroupSetting({
     groupId: groupId,
   });
   const theme = useTheme();
@@ -48,7 +48,7 @@ const GroupSetting = () => {
           <Separator customStyle={margin.v16} />
           <VStack style={[padding.h16]}>
             <Text variant="label2_regular">Group members</Text>
-            <Pressable>
+            <Pressable onPress={onAddPeople}>
               <HStack style={Layout.alignCenter}>
                 <VStack style={padding.v20}>
                   <AntDesign name={'adduser'} color={theme.colors.primaryText} size={resize(24)} />
