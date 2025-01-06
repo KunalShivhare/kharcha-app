@@ -377,6 +377,11 @@ const AddExpense = () => {
               })}
             </ScrollView>
           </ScrollView>
+          <View
+            style={{
+              height: 30,
+            }}
+          ></View>
           {!isKeyboardVisible && (
             <View style={styles.padding16}>
               <Button
