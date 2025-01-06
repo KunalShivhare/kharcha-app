@@ -273,6 +273,9 @@ const padding = StyleSheet.create({
   b200: {
     paddingBottom: 200,
   },
+  l4: {
+    paddingLeft: 4,
+  },
   l6: {
     paddingLeft: 6,
   },
@@ -288,8 +291,14 @@ const padding = StyleSheet.create({
   r6: {
     paddingRight: 6,
   },
+  r10: {
+    paddingRight: 10,
+  },
   r12: {
     paddingRight: 12,
+  },
+  r16: {
+    paddingRight: 16,
   },
   t90: {
     paddingTop: 90,

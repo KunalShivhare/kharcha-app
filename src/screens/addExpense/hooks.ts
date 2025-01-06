@@ -1,15 +1,16 @@
 import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 import { useExpenseStore } from '@/src/stores/expenseStore';
+import { useGroupStore } from '@/src/stores/groupStore';
 import { useSelfStore } from '@/src/stores/selfStore';
 import { distributeEqualPrice } from '@/src/utilities/expenseUtils';
 import { faker } from '@faker-js/faker/.';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { TextInput } from 'react-native';
 
 export enum SPLIT_TYPE {
   EQUALLY = 'equally',
   UNEQUALLY = 'unqually',
-  PERCENTAGE = 'percentage',
+  // PERCENTAGE = 'percentage',
 }
 
 const useAddExpense = ({ groupId }: { groupId?: string }) => {
@@ -20,10 +21,51 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
   const { self } = useSelfStore();
   const { addExpense } = useExpenseStore();
   const navigation = useAuthorizeNavigation();
+  const [membersList, setMembersList] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState();
+  const [paidByUser, setPaidByUser] = useState(self);
+  const group = useGroupStore((state) => state.groups.find((item) => item.id === groupId));
+  const expenseType = paidByUser?.phoneNumber === self?.phoneNumber ? 'LENT' : 'OWED';
 
-  const onAddExpense = async (members: []) => {
+  useEffect(() => {
+    if (group) {
+      let members = group?.members?.map((member: any) => {
+        return {
+          ...member,
+          amount: 0,
+        };
+      });
+      setSelectedGroup(group);
+      setMembersList(members);
+    }
+  }, [group]);
+
+  const onEndEditing = () => {
+    const { persons }: { persons: any } = distributeEqualPrice(amount ?? 0, membersList);
+    setMembersList([...persons]);
+  };
+
+  const onAddExpense = async () => {
     if (amount === 0) return;
-    const { persons: personWithPrice, totalLent } = distributeEqualPrice(amount ?? 0, members);
+
+    if (splitType === SPLIT_TYPE.UNEQUALLY) {
+      const unqualAmpuntSum = membersList.reduce(
+        (acc, member) => acc + parseFloat(member.amount),
+        0
+      );
+      if (unqualAmpuntSum > Number(amount)) {
+        alert('Amount should be equal to sum of all members');
+        return;
+      }
+    }
+    const personalAmount = membersList.find((member) => member?.phoneNumber === self?.phoneNumber);
+    let totalLent = null;
+    let totalOwed = null;
+    if (expenseType === 'LENT') {
+      totalLent = Number(amount) - personalAmount?.amount;
+    } else {
+      totalOwed = personalAmount?.amount;
+    }
     const expense = {
       id: faker.database.mongodbObjectId(),
       avatar: faker.image.avatar(),
@@ -31,9 +73,11 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
       splitType: splitType,
       amount: amount,
       groupId: groupId,
-      person: personWithPrice,
-      totalLent: totalLent,
-      paidBy: '1',
+      person: membersList,
+      totalLent: totalLent ?? null,
+      totalOwed: totalOwed ?? null,
+      expenseType: expenseType,
+      paidByUser: paidByUser,
     };
     await addExpense(expense);
     navigation.goBack();
@@ -65,7 +109,42 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
   };
 
   const onGroupPress = () => {
-    navigation.navigate('CustomModal');
+    // navigation.navigate('CustomModal', {});
+  };
+
+  const inputExpense = (member: any, amount: number) => {
+    setMembersList((prev: any) =>
+      prev.map((item: any) => {
+        if (item?.phoneNumber === member?.phoneNumber) {
+          return {
+            ...item,
+            amount: amount,
+          };
+        }
+        return item;
+      })
+    );
+  };
+
+  const removeMemberFromExpense = (member: any) => {
+    setMembersList((prev) => prev.filter((item: any) => item?.phoneNumber !== member?.phoneNumber));
+  };
+
+  const handleSetUnequally = (item: SPLIT_TYPE) => {
+    setSplitType(item);
+    if (item === SPLIT_TYPE.EQUALLY) {
+      const { persons }: { persons: any } = distributeEqualPrice(amount ?? 0, membersList);
+      setMembersList([...persons]);
+    }
+    if (item === SPLIT_TYPE.UNEQUALLY) {
+      const persons = membersList.map((item: any) => {
+        return {
+          ...item,
+          amount: 0,
+        };
+      });
+      setMembersList([...persons]);
+    }
   };
 
   return {
@@ -79,6 +158,14 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
     onAddExpense,
     onGroupPress,
     onAddUnequalExpense,
+    membersList,
+    selectedGroup,
+    removeMemberFromExpense,
+    paidByUser,
+    setPaidByUser,
+    inputExpense,
+    onEndEditing,
+    handleSetUnequally,
   };
 };
 

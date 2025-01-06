@@ -34,13 +34,13 @@ const Home = () => {
           <GroupList />
         </VStack>
         {/* <Button title="Add Expense" onPress={onAddExpense}></Button> */}
-        {/* <Button
-        textVariant="label3_regular"
-        title="logout"
-        onPress={signOut}
-        type={'Primary'}
-        size={'long'}
-      ></Button> */}
+        <Button
+          textVariant="label3_regular"
+          title="logout"
+          onPress={signOut}
+          type={'Primary'}
+          size={'long'}
+        ></Button>
       </VStack>
     </ThemeWrapper>
   );

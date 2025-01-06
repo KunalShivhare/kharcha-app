@@ -1,4 +1,4 @@
-import React, { ReactChild } from 'react';
+import React, { ReactElement } from 'react';
 import { useMemo } from 'react';
 import {
   ActivityIndicator,
@@ -19,7 +19,7 @@ interface ButtonProps extends TouchableOpacityProps {
   title: string;
   width?: string;
   customStyle?: ViewStyle;
-  customRightElement?: ReactChild;
+  customRightElement?: ReactElement;
   accessibilityLabel?: string;
   isLoading?: boolean;
   color?: string;
@@ -58,6 +58,7 @@ const Button: React.FC<ButtonProps> = ({
     }),
     [theme, type, disabled, width, customStyle]
   );
+
   const textColor = useMemo<string>(
     () => (type === 'Primary' ? COLORS.light100 : COLORS.orange),
     [theme, type, disabled]
@@ -68,7 +69,16 @@ const Button: React.FC<ButtonProps> = ({
       accessibilityLabel={accessibilityLabel}
       activeOpacity={0.75}
       disabled={disabled || isLoading}
-      style={[styles.base, styles[size], buttonStyle]}
+      style={[
+        styles.base,
+        styles[size],
+        buttonStyle,
+        disabled
+          ? {
+              backgroundColor: theme.colors.buttonPrimaryDisable,
+            }
+          : {},
+      ]}
       onPress={() => onPress && onPress()}
     >
       {isLoading ? (
@@ -76,7 +86,7 @@ const Button: React.FC<ButtonProps> = ({
       ) : (
         <Text
           variant={textVariant ?? 'label2_semibold'}
-          fontColor={color ?? textColor}
+          fontColor={disabled ? theme.colors.buttonTextPrimaryDisable : (color ?? textColor)}
           style={[styles.cta, textStyle]}
         >
           {title ?? ''}

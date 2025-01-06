@@ -210,6 +210,7 @@ const lightColors = {
 };
 
 const darkColors = {
+  ...lightColors,
   primaryColor: '#101010',
   primaryText: '#fff',
 };

@@ -1,5 +1,4 @@
 import { HStack } from '@/src/components/customUI/HStack';
-import ImageGroup from '@/src/components/customUI/ImageGroup';
 import { VStack } from '@/src/components/customUI/VStack';
 import Header from '@/src/components/header/header';
 import InputField from '@/src/components/inputs/inputField';
@@ -9,19 +8,30 @@ import { useGroupStore } from '@/src/stores/groupStore';
 import { resize } from '@/src/utils/deviceDimentions';
 import Entypo from '@expo/vector-icons/Entypo';
 import { faker } from '@faker-js/faker/.';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
+  FlatList,
   Image,
+  KeyboardAvoidingView,
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { SPLIT_TYPE, useAddExpense } from './hooks';
 import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
+import { useRoute } from '@react-navigation/native';
+import { AuthorizeNavigationProp } from '@/src/navigators/authorizeStack';
+import { gap, Layout, margin, padding } from '@/src/components/themes/globalStyles';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { Text } from '@/src/components/text';
+import { useTheme } from '@/src/components/themes/hooks';
+import PaidByList from '../lists/paidByList';
+import DismissKeyboard from '@/src/HOCs/DismissKeyboard';
+import Button from '@/src/components/buttons/button';
+import { useKeyboardStatus } from '@/src/hooks/keyboard';
 
 const AddExpense = () => {
   const images = [
@@ -29,8 +39,9 @@ const AddExpense = () => {
     'https://picsum.photos/200',
     'https://picsum.photos/200',
   ];
-  // const { groupId } = useLocalSearchParams();
-  const groupId = '';
+  const { params } = useRoute<AuthorizeNavigationProp<'AddExpense'>>();
+  const { groupId } = params;
+  const theme = useTheme();
 
   const {
     amount,
@@ -43,9 +54,19 @@ const AddExpense = () => {
     onAddExpense,
     onGroupPress,
     onAddUnequalExpense,
+    membersList,
+    selectedGroup,
+    removeMemberFromExpense,
+    paidByUser,
+    setPaidByUser,
+    inputExpense,
+    onEndEditing,
+    handleSetUnequally,
   } = useAddExpense({
     groupId: groupId?.toString() ?? '',
   });
+
+  const isKeyboardVisible = useKeyboardStatus();
 
   const { groups } = useGroupStore();
   const { expenseSharesWithPersons } = useExpenseShareWithPersonsStore();
@@ -53,116 +74,222 @@ const AddExpense = () => {
   const members = group?.members ?? [];
   const navigation = useAuthorizeNavigation();
 
-  const equalMembers = members;
-
-  const GroupListPopup = {
+  const PaidByListPopup = {
     show: ({ passProps = {} }: { passProps: any }) => {
       navigation.navigate('CustomModal', {
         cancelOnOutsideClick: true,
         showHeader: false,
         noScrollView: false,
         variant: 'bottom',
-        componentKey: 'GroupList',
+        children: (componentId: string, closeModal?: () => void) => (
+          <PaidByList
+            selectedUser={paidByUser}
+            users={members}
+            componentId={componentId}
+            closeModal={closeModal}
+            onPress={(user: any) => setPaidByUser(user)}
+          />
+        ),
         ...passProps,
       });
     },
-  };
-
-  const PriceDistribution = {
-    show: ({ passProps = {} }: { passProps: any }) => {
-      navigation.navigate('CustomModal', {
-        cancelOnOutsideClick: true,
-        showHeader: false,
-        noScrollView: false,
-        variant: 'bottom',
-        componentKey: 'MemberList',
-        ...passProps,
-      });
-    },
-  };
-
-  const handleSetUnequally = (item: SPLIT_TYPE) => {
-    setSplitType(item);
-    if (item === SPLIT_TYPE.UNEQUALLY && !isAddExpenseDisabled)
-      PriceDistribution.show({ passProps: { groupId: groupId, amount } });
-  };
-
-  const handleAddExpense = async () => {
-    if (splitType === SPLIT_TYPE.UNEQUALLY) {
-      const isShareEmpty = await expenseSharesWithPersons.every((item) => {
-        if (parseFloat(item.amount) === 0) {
-          return true;
-        }
-      });
-
-      if (isShareEmpty) {
-        alert('Bhai apne share toh daal lo');
-        return;
-      }
-
-      onAddUnequalExpense(expenseSharesWithPersons);
-    } else if (splitType === SPLIT_TYPE.EQUALLY) {
-      onAddExpense(equalMembers);
-    }
   };
 
   const isAddExpenseDisabled = !description || !amount || amount === 0;
 
   return (
     <ThemeWrapper>
-      <View style={styles.container}>
-        <Header title={'Add Expense'} />
-        <ScrollView
-          style={styles.subContainer}
-          contentContainerStyle={{
-            alignItems: 'center',
-          }}
-        >
-          <>
-            <Pressable onPress={() => GroupListPopup.show({ passProps: {} })}>
-              <HStack style={styles.groupContainer}>
-                <HStack style={{ justifyContent: 'center', alignItems: 'center' }}>
-                  <Image source={{ uri: faker.image.avatar() }} style={styles.avatar} />
-                  <Text style={styles.groupName}>
-                    {faker.word.noun() + ' ' + faker.word.noun()}
-                  </Text>
-                </HStack>
-                <Entypo name="chevron-down" size={resize(24)} color={COLORS.primary} />
-              </HStack>
-            </Pressable>
-            <View style={styles.splitGroup}>
-              <ImageGroup imageHeight={resize(48)} imageWidth={resize(48)} images={images} />
+      <KeyboardAvoidingView style={Layout.container} behavior="padding">
+        <>
+          <ScrollView style={Layout.container} keyboardShouldPersistTaps={'handled'}>
+            <Header title={'Add Expense'} />
+            <View>
+              <ScrollView
+                horizontal
+                style={{
+                  padding: 0,
+                  backgroundColor: theme.colors.modalBackground,
+                  marginHorizontal: 8,
+                  borderRadius: 20,
+                }}
+                contentContainerStyle={{
+                  paddingRight: 20,
+                }}
+              >
+                <Pressable
+                  style={[
+                    Layout.container,
+                    padding.l6,
+                    padding.v12,
+                    gap.g10,
+                    Layout.alignCenter,
+                    {
+                      width: 40,
+                    },
+                  ]}
+                  // onPress={() => }
+                >
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      zIndex: 2,
+                      backgroundColor: '#fefefe',
+                      borderRadius: 50,
+                      width: 30,
+                      height: 30,
+                    }}
+                  >
+                    <AntDesign name="plus" color={'black'} size={25} />
+                  </View>
+                  <Text variant="label3_regular">Add</Text>
+                </Pressable>
+                {membersList.map((member) => {
+                  return (
+                    <Pressable
+                      style={[
+                        Layout.container,
+                        padding.v12,
+                        gap.g10,
+                        Layout.alignCenter,
+                        {
+                          width: 60,
+                          marginTop: 2,
+                        },
+                      ]}
+                      onPress={() => removeMemberFromExpense(member)}
+                    >
+                      <View
+                        style={{
+                          position: 'absolute',
+                          alignSelf: 'flex-end',
+                          zIndex: 2,
+                          marginTop: 4,
+                          backgroundColor: '#fefefe',
+                          borderRadius: 50,
+                        }}
+                      >
+                        <AntDesign name="close" color={'black'} size={20} />
+                      </View>
+                      <Image
+                        source={{ uri: faker.image.avatar() }}
+                        style={{
+                          height: 30,
+                          width: 30,
+                          borderRadius: 50,
+                        }}
+                      />
+                      <Text variant="label3_regular" numberOfLines={1} textAlign="center">
+                        {member?.name}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </ScrollView>
+              <View style={styles.subContainer}>
+                <VStack style={{ paddingTop: resize(32) }}>
+                  <HStack style={[styles.descriptionContainer]}>
+                    <Pressable
+                      style={{
+                        backgroundColor: theme.colors.modalBackground,
+                        borderWidth: 1,
+                        borderColor: theme.colors.Grey99,
+                        borderRadius: 4,
+                        height: 40,
+                        width: 40,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <AntDesign name="menu-fold" color={'white'} size={20} />
+                    </Pressable>
+
+                    <InputField
+                      placeholder="Description"
+                      style={styles.descriptionTextInput}
+                      containerStyle={{
+                        flex: 1,
+                        paddingRight: 64,
+                        justifyContent: 'flex-end',
+                      }}
+                      value={description ? String(description) : ''}
+                      onChangeText={(value) => setDescription(value)}
+                    />
+                  </HStack>
+                  <HStack
+                    style={[
+                      styles.descriptionContainer,
+                      {
+                        paddingTop: 10,
+                      },
+                    ]}
+                  >
+                    <Pressable
+                      style={{
+                        backgroundColor: theme.colors.modalBackground,
+                        borderWidth: 1,
+                        borderColor: theme.colors.Grey99,
+                        borderRadius: 4,
+                        height: 40,
+                        width: 40,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <FontAwesome name="rupee" color={'white'} size={20} />
+                    </Pressable>
+                    <InputField
+                      placeholder="0.00"
+                      style={styles.descriptionTextInput}
+                      containerStyle={{
+                        flex: 1,
+                        paddingRight: 64,
+                      }}
+                      value={amount ? String(amount) : ''}
+                      keyboardType="numeric"
+                      onChangeText={(value) => setAmount(Number(value))}
+                      onEndEditing={onEndEditing}
+                    />
+                  </HStack>
+                </VStack>
+                <Pressable onPress={() => PaidByListPopup.show({ passProps: {} })}>
+                  <HStack style={[Layout.justifyCenter, Layout.alignCenter, padding.t24]}>
+                    <Text variant="label3_regular" style={padding.r10}>
+                      Paid by
+                    </Text>
+                    <HStack
+                      style={{
+                        backgroundColor: theme.colors.modalBackground,
+                        borderWidth: 1,
+                        borderColor: theme.colors.Grey99,
+                        borderRadius: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingRight: 4,
+                        paddingLeft: 4,
+                        paddingVertical: 4,
+                      }}
+                    >
+                      <Text variant="label3_regular">{paidByUser?.name ?? 'You'}</Text>
+                      <Entypo name="chevron-down" size={resize(20)} color={COLORS.primary} />
+                    </HStack>
+                  </HStack>
+                </Pressable>
+              </View>
             </View>
-            <VStack style={styles.gap8}>
-              <VStack style={[styles.descriptionContainer]}>
-                <Text style={[styles.textWhite, styles.for]}>For</Text>
-                <InputField
-                  placeholder="Enter a description"
-                  style={styles.descriptionTextInput}
-                  value={description ? String(description) : ''}
-                  onChangeText={(value) => setDescription(value)}
-                />
-              </VStack>
-              <VStack style={[styles.amountContainer]}>
-                <Text style={[styles.amountText]}>Amount</Text>
-                <InputField
-                  inputRef={amountRef}
-                  placeholder="Enter amount"
-                  style={[styles.amountTextInput]}
-                  value={amount ? String(amount) : ''}
-                  onChangeText={(value) => setAmount(Number(value))}
-                  keyboardType="decimal-pad"
-                  placeholderTextColor={COLORS.dark25}
-                />
-              </VStack>
-            </VStack>
-            <VStack style={styles.splitTypeContainer}>
+
+            <HStack style={styles.splitTypeContainer}>
               {Object.values(SPLIT_TYPE).map((item) => {
                 return (
                   <Pressable
                     style={[
                       styles.splitTypeItem,
-                      { backgroundColor: item === splitType ? '#101010' : undefined },
+                      item === splitType
+                        ? {
+                            borderBottomColor: COLORS.primary,
+                            borderBottomWidth: 1,
+                          }
+                        : undefined,
                     ]}
                     onPress={() => handleSetUnequally(item)}
                     key={item}
@@ -178,31 +305,92 @@ const AddExpense = () => {
                   </Pressable>
                 );
               })}
-            </VStack>
-            <VStack style={[styles.descriptionContainer, styles.paidByHeadingContainer]}>
-              <Text style={styles.textWhite}>Paid by</Text>
-              <HStack style={styles.paidByContainer}>
-                <View style={styles.groupAvatar}>
-                  <Image source={{ uri: faker.image.avatar() }} style={styles.avatar} />
-                </View>
-                <Text style={styles.paidText}>You</Text>
-                <View style={styles.downArrow}>
-                  <Entypo name="chevron-down" size={resize(28)} color={COLORS.primary} />
-                </View>
-              </HStack>
-            </VStack>
-          </>
-        </ScrollView>
-        <View style={styles.padding16}>
-          <TouchableOpacity
-            disabled={isAddExpenseDisabled}
-            style={styles.buttonContainer}
-            onPress={() => handleAddExpense()}
-          >
-            <Text style={styles.title}>Done</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+            </HStack>
+            <ScrollView
+              contentContainerStyle={[
+                padding.v16,
+                gap.g16,
+                {
+                  backgroundColor: COLORS.dark50,
+                  borderRadius: resize(4),
+                  padding: resize(4),
+                  marginHorizontal: resize(16),
+                  justifyContent: 'space-between',
+                },
+              ]}
+            >
+              {[...membersList, ...membersList].map((member, index) => {
+                return (
+                  <HStack
+                    key={String(member?.phoneNumber) + index}
+                    style={[
+                      Layout.container,
+                      padding.l16,
+                      padding.r16,
+                      gap.g10,
+                      Layout.alignCenter,
+                      Layout.spaceBetween,
+                    ]}
+                  >
+                    <HStack style={[Layout.alignCenter, gap.g10]}>
+                      <Image
+                        source={{ uri: faker.image.avatar() }}
+                        style={{
+                          height: 30,
+                          width: 30,
+                          borderRadius: 50,
+                        }}
+                      />
+                      <Text variant="label3_regular" fontColor="white">
+                        {member?.name}
+                      </Text>
+                    </HStack>
+                    <HStack style={[Layout.justifyCenter, Layout.alignCenter]}>
+                      <Text variant="label3_regular" fontColor="white">
+                        ₹
+                      </Text>
+                      <InputField
+                        placeholder="0.00"
+                        style={{
+                          color: 'white',
+                          fontSize: 14,
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'white',
+                          minWidth: 40,
+                        }}
+                        editable={splitType === SPLIT_TYPE.UNEQUALLY}
+                        //@ts-ignore
+                        containerStyle={[padding.r16, padding.l4]}
+                        keyboardType="numeric"
+                        value={member?.amount ? String(member?.amount) : ''}
+                        onChangeText={(value) => {
+                          if (amount) {
+                            inputExpense(member, value);
+                          } else {
+                            alert('Please enter the amount first');
+                          }
+                        }}
+                      />
+                    </HStack>
+                  </HStack>
+                );
+              })}
+            </ScrollView>
+          </ScrollView>
+          {!isKeyboardVisible && (
+            <View style={styles.padding16}>
+              <Button
+                type="Primary"
+                size="long"
+                title="Done"
+                onPress={onAddExpense}
+                customStyle={styles.buttonContainer}
+                disabled={isAddExpenseDisabled}
+              />
+            </View>
+          )}
+        </>
+      </KeyboardAvoidingView>
     </ThemeWrapper>
   );
 };
@@ -210,11 +398,8 @@ const AddExpense = () => {
 export default AddExpense;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   subContainer: {
-    flex: 1,
+    paddingHorizontal: resize(16),
   },
   avatar: { height: 40, width: 40, borderRadius: 50, resizeMode: 'contain' },
   groupName: {
@@ -228,6 +413,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: resize(8),
     borderRadius: resize(10),
+    borderWidth: 0,
   },
   gap8: { gap: resize(8) },
   for: {
@@ -241,38 +427,46 @@ const styles = StyleSheet.create({
   },
   splitTypeContainer: {
     backgroundColor: COLORS.dark50,
-    borderRadius: resize(32),
+    borderRadius: resize(4),
     marginTop: resize(24),
-    padding: resize(4),
+    paddingHorizontal: resize(4),
+    paddingTop: resize(4),
+    marginHorizontal: resize(16),
     justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginHorizontal: 20,
-    height: resize(48),
   },
   amountTextInput: {
-    borderWidth: 0,
     paddingVertical: 10,
     fontSize: 24,
     color: '#fefefe',
     textAlign: 'center',
+    paddingHorizontal: resize(16),
   },
   amountText: {
     color: 'white',
     fontSize: resize(18),
+    paddingRight: resize(10),
   },
   amountContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
   },
   descriptionTextInput: {
+    flex: 1,
     borderWidth: 0,
     paddingVertical: 10,
     color: 'white',
+    fontSize: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
   },
   textWhite: {
     color: 'white',
   },
   descriptionContainer: {
-    alignItems: 'center',
+    // flex: 1,
+    alignItems: 'flex-end',
+    gap: 10,
+    paddingLeft: 64,
   },
   splitGroup: {
     marginVertical: resize(20),

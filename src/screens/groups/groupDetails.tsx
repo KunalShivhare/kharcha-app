@@ -13,10 +13,12 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { useGroups } from './hooks';
 import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
+import { useRoute } from '@react-navigation/native';
+import { AuthorizeNavigationProp } from '@/src/navigators/authorizeStack';
 
 const GroupDetails = () => {
-  // const { groupId } = useLocalSearchParams<{ groupId: string }>();
-  const groupId = '';
+  const { params } = useRoute<AuthorizeNavigationProp<'GroupDetails'>>();
+  const { groupId } = params;
   const { owed, own, onSettleUp, onViewDetails, onBalance, onAdd, groupData, expenseData } =
     useGroups({
       groupId,
@@ -116,17 +118,29 @@ const GroupDetails = () => {
                     <Text variant={'heading4_bold'} fontColor="white">
                       {expense?.description}
                     </Text>
-                    <Text variant={'label2_medium'} fontColor="#979797">
-                      {`You paid ₹${expense?.amount}`}
-                    </Text>
+                    {expense?.expenseType === 'LENT' ? (
+                      <Text variant={'label2_medium'} fontColor="#979797">
+                        {`You paid ₹${expense?.amount}`}
+                      </Text>
+                    ) : (
+                      <Text variant={'label2_medium'} fontColor="#979797">
+                        {`${expense?.paidByUser?.firstName ?? String(expense?.paidByUser?.name).split(' ')[0]} paid ₹${expense?.amount}`}
+                      </Text>
+                    )}
                   </VStack>
                   <VStack style={[Layout.justifyFlexEnd, Layout.alignFlexEnd, gap.g4]}>
                     <Text variant={'label2_medium'} fontColor="#979797">
                       Dec, 09
                     </Text>
-                    <Text variant={'heading4_bold'} fontColor="#ACE4D6">
-                      {`₹${expense?.totalLent}`}
-                    </Text>
+                    {expense?.expenseType === 'LENT' ? (
+                      <Text variant={'heading4_bold'} fontColor="#ACE4D6">
+                        {`₹ ${expense?.totalLent}`}
+                      </Text>
+                    ) : (
+                      <Text variant={'heading4_bold'} fontColor={'rgb(241, 109, 76)'}>
+                        {`₹ ${expense?.totalOwed}`}
+                      </Text>
+                    )}
                   </VStack>
                 </HStack>
               );

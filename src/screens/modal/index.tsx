@@ -132,51 +132,59 @@ const CustomModal = () => {
         return null; // Handle cases where no valid key is passed
     }
   };
-
   return (
-    <ThemeWrapper
-      style={{
-        backgroundColor: colors.overlay,
-      }}
-    >
-      {
-        <TouchableOpacity
-          style={[
-            Layout.container,
-            parentContainer,
-            variant === MODAL_VARIANT.Center ? style.centerModal : style.bottomModal,
-          ]}
-          activeOpacity={1}
-          onPress={() => {
-            cancelOnOutsideClick && closeModal();
-          }}
-          disabled={disableWrapperTouches}
-        >
-          {!hideClose && (
-            <Pressable
-              onPress={closeModal}
-              style={[style.wrapper, { backgroundColor: theme.colors.primaryColor }]}
+    <>
+      <ThemeWrapper
+        style={{
+          backgroundColor: colors.overlay,
+        }}
+      >
+        <View style={[Layout.container, { backgroundColor: colors.overlay }]}>
+          {
+            <TouchableOpacity
+              style={[
+                Layout.container,
+                parentContainer,
+                variant === MODAL_VARIANT.Center ? style.centerModal : style.bottomModal,
+              ]}
+              activeOpacity={1}
+              onPress={() => {
+                cancelOnOutsideClick && closeModal();
+              }}
+              disabled={disableWrapperTouches}
             >
-              <AntDesign name="close" size={16} color={theme.colors.primaryText} />
-            </Pressable>
-          )}
-          <TouchableWithoutFeedback style={contentStyle} disabled={disableWrapperTouches}>
-            <Animated.View
-              onLayout={onLayout}
-              style={[...contentStyle, { transform: [{ translateY: animationState }] }]}
-            >
-              {noScrollView ? (
-                <View style={[Layout.container, containerStyle]}>{renderChildren()}</View>
-              ) : (
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
-                  {renderChildren()}
-                </ScrollView>
+              {!hideClose && (
+                <Pressable
+                  onPress={closeModal}
+                  style={[style.wrapper, { backgroundColor: theme.colors.primaryColor }]}
+                >
+                  <AntDesign name="close" size={16} color={theme.colors.primaryText} />
+                </Pressable>
               )}
-            </Animated.View>
-          </TouchableWithoutFeedback>
-        </TouchableOpacity>
-      }
-    </ThemeWrapper>
+              <TouchableWithoutFeedback style={contentStyle} disabled={disableWrapperTouches}>
+                <Animated.View
+                  onLayout={onLayout}
+                  style={[...contentStyle, { transform: [{ translateY: animationState }] }]}
+                >
+                  {noScrollView ? (
+                    <View style={[Layout.container, containerStyle]}>
+                      {!!children && children(componentId, closeModal)}
+                    </View>
+                  ) : (
+                    <ScrollView
+                      showsVerticalScrollIndicator={false}
+                      keyboardShouldPersistTaps="always"
+                    >
+                      {!!children && children(componentId, closeModal)}
+                    </ScrollView>
+                  )}
+                </Animated.View>
+              </TouchableWithoutFeedback>
+            </TouchableOpacity>
+          }
+        </View>
+      </ThemeWrapper>
+    </>
   );
 };
 
