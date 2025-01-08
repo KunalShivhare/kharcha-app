@@ -40,5 +40,6 @@ const styles = StyleSheet.create({
     paddingVertical: resize(8),
     paddingHorizontal: resize(16),
     height: resize(56),
+    color: isInputFilled ? COLORS.light100 : '#91919F',
   }),
 });

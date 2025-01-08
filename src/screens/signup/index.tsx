@@ -10,12 +10,64 @@ import Header from '@/src/components/header/header';
 import { useUnauthorizeNavigation } from '@/src/navigators/navigators';
 import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
+type errors = { name: string; email: string; mobile: string };
+
 const Signup = () => {
   const [isChecked, setChecked] = useState<boolean>(false);
   const navigation = useUnauthorizeNavigation();
   const handleOnPressSignUp = () => {
+    console.log('form: ', form);
     navigation.navigate('OTPVerification');
   };
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    mobile: '',
+  });
+
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    mobile: '',
+  });
+
+  const validate = () => {
+    const newErrors: errors = {
+      name: '',
+      email: '',
+      mobile: '',
+    };
+
+    if (!form.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    if (!form.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+
+    if (!form.mobile.trim()) {
+      newErrors.mobile = 'Mobile number is required';
+    } else if (!/^\d+$/.test(form.mobile)) {
+      newErrors.mobile = 'Mobile number must contain only digits';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (validate()) {
+      console.log('Form Submitted:', form);
+    }
+  };
+
+  const handleChange = (field: string, value: string) => {
+    setForm({ ...form, [field]: value });
+  };
+
   return (
     <ThemeWrapper>
       <DismissKeyboard>
@@ -23,14 +75,32 @@ const Signup = () => {
           <Header title={'Sign Up'} />
           <View style={styles.signUpFormContainer}>
             <View style={styles.signUpFormFieldContainer}>
-              <InputField placeholder="Mobile Number" keyboardType="decimal-pad" />
-              <InputField placeholder="Email" />
               <InputField
+                placeholder="Name"
+                value={form.name}
+                onChangeText={(text) => handleChange('name', text)}
+              />
+              {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+              <InputField
+                placeholder="Email"
+                value={form.email}
+                onChangeText={(text) => handleChange('email', text)}
+              />
+              {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+              <InputField
+                placeholder="Mobile Number"
+                keyboardType="decimal-pad"
+                value={form.mobile}
+                onChangeText={(text) => handleChange('mobile', text)}
+              />
+              {errors.mobile && <Text style={styles.errorText}>{errors.mobile}</Text>}
+
+              {/* <InputField
                 placeholder="Password"
                 autoCapitalize="none"
                 spellCheck={false}
                 secureTextEntry={true}
-              />
+              /> */}
             </View>
             <View style={styles.signUpfooterContainer}>
               <View style={styles.signUpAgreementContainer}>
@@ -113,5 +183,8 @@ const styles = StyleSheet.create({
   login: {
     color: COLORS.green100,
     textDecorationLine: 'underline',
+  },
+  errorText: {
+    color: 'red',
   },
 });
