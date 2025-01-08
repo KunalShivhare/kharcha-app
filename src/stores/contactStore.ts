@@ -7,7 +7,7 @@ type CONTACT_STORE = {
   fetchContacts: () => void;
   loadingContact: boolean;
   selectedContacts: Array<Contact>;
-  selecteContact: (selectedContact: Contact) => void;
+  selectContact: (selectedContact: Contact) => void;
   removeContact: (selectedContact: Contact) => void;
   resetSelectedContacts: () => void;
 };
@@ -48,7 +48,7 @@ const useContactStore = create<CONTACT_STORE>((set) => ({
     }
   },
   loadingContact: true,
-  selecteContact: (selectedContact: Contact) => {
+  selectContact: (selectedContact: Contact) => {
     set((state) => ({ selectedContacts: [...state.selectedContacts, selectedContact] }));
   },
   removeContact: (selectedContact: Contact) => {

@@ -11,10 +11,13 @@ import { useGroups } from './hooks';
 import { COLORS } from '@/src/providers/theme.style';
 import { gap, Layout } from '@/src/components/themes/globalStyles';
 import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
+import { AuthorizeNavigationProp } from '@/src/navigators/authorizeStack';
+import { useRoute } from '@react-navigation/native';
 
 const CreateGroup = () => {
+  const { params } = useRoute<AuthorizeNavigationProp<'CreateGroup'>>();
   const { groupTypes, groupName, setGroupName, onDonePress, selectedGroupType, setGroupType } =
-    useGroups();
+    useGroups(params || {});
   const imageURL = useMemo(() => faker.image.avatar(), []);
 
   return (

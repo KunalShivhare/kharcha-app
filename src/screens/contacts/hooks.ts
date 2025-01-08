@@ -4,14 +4,21 @@ import { useShallow } from 'zustand/react/shallow';
 import { Contact } from './types';
 import useBackHandler from '@/src/utilities/useBackHandler';
 import { useAuthorizeNavigation } from '@/src/navigators/navigators';
+import { useGroupStore } from '@/src/stores/groupStore';
 
-const useContacts = ({ navigateToScreen }: { navigateToScreen?: any }) => {
+const useContacts = ({
+  groupId,
+  navigateToScreen,
+}: {
+  groupId?: string;
+  navigateToScreen?: any;
+}) => {
   const [
     contacts,
     fetchContacts,
     loadingContact,
     selectedContacts,
-    selecteContact,
+    selectContact,
     removeContact,
     resetSelectedContacts,
   ] = useContactStore(
@@ -20,11 +27,14 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: any }) => {
       state.fetchContacts,
       state.loadingContact,
       state.selectedContacts,
-      state.selecteContact,
+      state.selectContact,
       state.removeContact,
       state.resetSelectedContacts,
     ])
   );
+  const currentGroup = useGroupStore((state) => state.getGroup(groupId ?? ''));
+  const { editGroup } = useGroupStore();
+  const groupMembers = currentGroup?.members ?? [];
   const navigation = useAuthorizeNavigation();
 
   const onSelectContact = (contact: Contact) => {
@@ -32,7 +42,7 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: any }) => {
       (selectedContact) => selectedContact?.phoneNumber === contact?.phoneNumber
     );
     if (index === -1) {
-      selecteContact(contact);
+      selectContact(contact);
     } else {
       removeContact(contact);
     }
@@ -44,6 +54,12 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: any }) => {
     );
   };
 
+  const isDisabled = (contact: Contact) => {
+    return groupMembers.some(
+      (selectedContact: any) => selectedContact?.phoneNumber === contact?.phoneNumber
+    );
+  };
+
   const onGoBack = () => {
     navigation.goBack();
     resetSelectedContacts();
@@ -51,6 +67,16 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: any }) => {
 
   const onNext = () => {
     navigation.navigate(navigateToScreen ?? 'SelectedContactList');
+  };
+
+  const onSave = () => {
+    const group = {
+      ...currentGroup,
+      members: [...currentGroup?.members, ...selectedContacts],
+    };
+    editGroup(group);
+    resetSelectedContacts();
+    navigation.pop();
   };
 
   useEffect(() => {
@@ -71,6 +97,8 @@ const useContacts = ({ navigateToScreen }: { navigateToScreen?: any }) => {
     onGoBack,
     removeContact,
     onNext,
+    onSave,
+    isDisabled,
   };
 };
 export { useContacts };

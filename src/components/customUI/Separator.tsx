@@ -1,8 +1,10 @@
 import { COLORS } from '@/src/providers/theme.style';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
-const Separator = () => <View style={styles.separator} />;
+const Separator = ({ customStyle }: { customStyle?: ViewStyle }) => (
+  <View style={[styles.separator, customStyle]} />
+);
 
 export default Separator;
 
