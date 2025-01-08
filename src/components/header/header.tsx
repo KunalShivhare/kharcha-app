@@ -26,7 +26,7 @@ const Header: React.FC<{
       <View style={styles.headerSubContainer}>
         {showBackButton ? (
           <Pressable style={styles.backButtonContainer} onPress={handleOnPressBackButton}>
-            <AntDesign name="arrowleft" size={resize(32)} color="white" />
+            <AntDesign name="leftcircle" size={32} color="white" />
           </Pressable>
         ) : (
           <View style={styles.backButtonContainer}></View>

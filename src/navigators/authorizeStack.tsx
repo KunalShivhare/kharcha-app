@@ -30,6 +30,7 @@ export type AuthorizeNavigationStackList = {
   };
   AddExpense: {
     groupId?: string;
+    expenseId?: string;
   };
   ExpenseDetails: {
     expenseId: string;

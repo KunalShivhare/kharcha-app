@@ -79,6 +79,8 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
       totalOwed: totalOwed ?? null,
       expenseType: expenseType,
       paidByUser: paidByUser,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     await addExpense(expense);
     navigation.goBack();
