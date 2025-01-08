@@ -10,11 +10,13 @@ import { COLORS } from '@/src/providers/theme.style';
 import { resize } from '@/src/utils/deviceDimentions';
 import { faker } from '@faker-js/faker/.';
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useGroups } from './hooks';
 import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 import { useRoute } from '@react-navigation/native';
 import { AuthorizeNavigationProp } from '@/src/navigators/authorizeStack';
+import { AntDesign } from '@expo/vector-icons';
+import { useAuthorizeNavigation } from '@/src/navigators/navigators';
 
 const GroupDetails = () => {
   const { params } = useRoute<AuthorizeNavigationProp<'GroupDetails'>>();
@@ -23,10 +25,24 @@ const GroupDetails = () => {
     useGroups({
       groupId,
     });
+  const navigation = useAuthorizeNavigation();
+  const SettingElement = () => {
+    return (
+      <Pressable
+        onPress={() =>
+          navigation.navigate('GroupSetting', {
+            groupId: groupId,
+          })
+        }
+      >
+        <AntDesign name="setting" size={resize(32)} color="white" />
+      </Pressable>
+    );
+  };
   return (
     <ThemeWrapper>
       <View style={[Layout.container]}>
-        <Header title={groupData?.name ?? 'Group'} />
+        <Header title={groupData?.name ?? 'Group'} customRightElement={<SettingElement />} />
 
         <VStack style={styles.groupCardContainer}>
           <HStack>

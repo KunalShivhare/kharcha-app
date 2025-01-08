@@ -8,14 +8,18 @@ import GroupDetails from '../screens/groups/groupDetails';
 import SelectedContactList from '../screens/contacts/selectedContactList';
 import CustomModal from '../screens/modal';
 import AddExpense from '../screens/addExpense';
+import GroupSetting from '../screens/groupSetting';
 
 export type AuthorizeNavigationStackList = {
   BottomTabNavigator: undefined;
   ContactList: {
     headerTitle?: string;
     navigateToScreen?: string;
+    groupId?: string;
   };
-  CreateGroup: undefined;
+  CreateGroup: {
+    groupId?: string;
+  };
   GroupDetails: {
     groupId: string;
   };
@@ -29,6 +33,9 @@ export type AuthorizeNavigationStackList = {
   };
   AddExpense: {
     groupId?: string;
+  };
+  GroupSetting: {
+    groupId: string;
   };
 };
 
@@ -60,6 +67,13 @@ const AuthorizeNavigation = () => {
       <AuthorizeNavigationStack.Screen
         name="AddExpense"
         component={AddExpense}
+        options={{
+          presentation: 'modal',
+        }}
+      />
+      <AuthorizeNavigationStack.Screen
+        name="GroupSetting"
+        component={GroupSetting}
         options={{
           presentation: 'modal',
         }}

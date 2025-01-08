@@ -29,8 +29,8 @@ const useGroups = (props?: any) => {
   const navigation = useAuthorizeNavigation();
   const [groupName, setGroupName] = useState<string>('');
   const [selectedGroupType, setGroupType] = useState<string>('');
-  const { createGroup } = useGroupStore();
-  const groupData = useGroupStore((state) => state.groups.find((item) => item?.id === groupId));
+  const { createGroup, editGroup } = useGroupStore();
+  const groupData = useGroupStore((state) => state.getGroup(groupId));
   const expenses = useExpenseStore((state) => state.expenses);
   const [selectedContacts, resetSelectedContacts] = useContactStore(
     useShallow((state) => [state.selectedContacts, state.resetSelectedContacts])
@@ -45,6 +45,8 @@ const useGroups = (props?: any) => {
   useEffect(() => {
     if (groupData) {
       setLoading(false);
+      setGroupName(groupData?.name);
+      setGroupType(groupData?.type);
     }
   }, [groupData]);
 
@@ -55,6 +57,17 @@ const useGroups = (props?: any) => {
   };
 
   const onDonePress = () => {
+    if (groupId) {
+      const group = {
+        ...groupData,
+        name: groupName,
+        type: selectedGroupType,
+      };
+      editGroup(group);
+      reset();
+      navigation.pop();
+      return;
+    }
     if (groupName === '') {
       Alert.alert('Group name is must!');
       return;

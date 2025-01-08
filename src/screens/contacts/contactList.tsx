@@ -25,21 +25,35 @@ import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
 
 const ContactList = () => {
   const { params } = useRoute<AuthorizeNavigationProp<'ContactList'>>();
-  const { headerTitle, navigateToScreen } = params;
+  const { headerTitle, groupId } = params;
   const {
     contacts,
     selectedContacts,
     onSelectContact,
     loadingContact,
     isSelected,
+    isDisabled,
     onGoBack,
     onNext,
+    onSave,
   } = useContacts(params || {});
 
   const contactCard = useCallback(
     ({ item: contact, index }: { item: any; index: number }) => {
+      const disable = isDisabled(contact);
       return (
-        <Pressable onPress={() => onSelectContact(contact)} key={contact?.id}>
+        <Pressable
+          disabled={disable}
+          onPress={() => onSelectContact(contact)}
+          key={contact?.id}
+          style={
+            disable
+              ? {
+                  opacity: 0.5,
+                }
+              : { opacity: 1 }
+          }
+        >
           <HStack pb={16}>
             <VStack style={styles.contactAvatarContainer}>
               {contact?.image ? (
@@ -54,11 +68,18 @@ const ContactList = () => {
               <Text variant={'heading4_bold'} fontColor="white">
                 {contact?.name ?? 'Unknown'}
               </Text>
-              <Text variant={'label2_medium'} fontColor="#979797">
-                {contact?.phoneNumber}
-              </Text>
+              {disable ? (
+                <Text variant={'label2_medium'} fontColor="#979797">
+                  Already in the group
+                </Text>
+              ) : (
+                <Text variant={'label2_medium'} fontColor="#979797">
+                  {contact?.phoneNumber}
+                </Text>
+              )}
             </VStack>
             {isSelected(contact) && <MaterialIcons name="check" size={30} color={'green'} />}
+            {disable && <MaterialIcons name="check" size={30} color={'grey'} />}
           </HStack>
         </Pressable>
       );
@@ -86,13 +107,20 @@ const ContactList = () => {
                 windowSize={9}
               />
             </VStack>
-            {selectedContacts.length > 0 && (
-              <View style={[padding.v16, padding.h16]}>
-                <TouchableOpacity style={styles.buttonContainer} onPress={onNext}>
-                  <Text style={styles.title}>Next</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+            {selectedContacts.length > 0 &&
+              (groupId ? (
+                <View style={[padding.v16, padding.h16]}>
+                  <TouchableOpacity style={styles.buttonContainer} onPress={onSave}>
+                    <Text style={styles.title}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={[padding.v16, padding.h16]}>
+                  <TouchableOpacity style={styles.buttonContainer} onPress={onNext}>
+                    <Text style={styles.title}>Next</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
           </>
         )}
         {loadingContact && (
