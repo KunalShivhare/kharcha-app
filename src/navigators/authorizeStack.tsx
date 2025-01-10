@@ -8,6 +8,7 @@ import GroupDetails from '../screens/groups/groupDetails';
 import SelectedContactList from '../screens/contacts/selectedContactList';
 import CustomModal from '../screens/modal';
 import AddExpense from '../screens/addExpense';
+import ExpenseDetails from '../screens/expenseDetails';
 import GroupSetting from '../screens/groupSetting';
 
 export type AuthorizeNavigationStackList = {
@@ -33,6 +34,10 @@ export type AuthorizeNavigationStackList = {
   };
   AddExpense: {
     groupId?: string;
+    expenseId?: string;
+  };
+  ExpenseDetails: {
+    expenseId: string;
   };
   GroupSetting: {
     groupId: string;
@@ -56,6 +61,7 @@ const AuthorizeNavigation = () => {
       <AuthorizeNavigationStack.Screen name="CreateGroup" component={CreateGroup} />
       <AuthorizeNavigationStack.Screen name="GroupDetails" component={GroupDetails} />
       <AuthorizeNavigationStack.Screen name="SelectedContactList" component={SelectedContactList} />
+      <AuthorizeNavigationStack.Screen name="ExpenseDetails" component={ExpenseDetails} />
       <AuthorizeNavigationStack.Screen
         name="CustomModal"
         component={CustomModal}

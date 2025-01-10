@@ -18,7 +18,7 @@ const Color = {
   purple: '#879CCA',
   purple2: 'rgba(135,156,202,0.18)',
   black: '#333333',
-  black2: '#63003D',
+  black2: '#121212',
   black4: '#1F1F1F',
   black6: '#111111',
   black7: '#161616',
@@ -95,6 +95,7 @@ const Color = {
   charcoal: '#333333',
   khakhi: '#A9924B',
   khakhiLight: 'rgba(202,179,109, 0.2)',
+  red10: 'rgba(215, 10, 10, 0.60)',
 };
 
 const lightColors = {
@@ -207,6 +208,7 @@ const lightColors = {
   charcoal: Color.charcoal,
   darkKhakhi: Color.khakhi,
   lightKhakhi: Color.khakhiLight,
+  owe: Color.red10,
 };
 
 const darkColors = {
