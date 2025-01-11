@@ -1,4 +1,6 @@
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
+import { useAuthorizeNavigation } from '../navigators/navigators';
 
 type AuthContext = {
   signIn: () => void;
@@ -17,10 +19,22 @@ const AuthContext = createContext<AuthContext>({
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchAuthStatus = async () => {
+      const token = await AsyncStorage.getItem('token');
+      setIsAuthenticated(!!token);
+    };
+
+    fetchAuthStatus();
+  }, [isAuthenticated]);
 
   const signIn = () => setIsAuthenticated(true);
-  const signOut = () => setIsAuthenticated(false);
+  const signOut = async () => {
+    await AsyncStorage.clear();
+    setIsAuthenticated(false);
+  };
 
   return (
     <AuthContext.Provider value={{ signIn, signOut, isAuthenticated }}>

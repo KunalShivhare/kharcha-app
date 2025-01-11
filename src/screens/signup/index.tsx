@@ -1,42 +1,35 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, StatusBar } from 'react-native';
-import Checkbox from 'expo-checkbox';
+import axiosInstance from '@/src/axios';
 import LargeButton from '@/src/components/buttons/largeButton';
-import InputField from '@/src/components/inputs/inputField';
-import DismissKeyboard from '@/src/HOCs/DismissKeyboard';
-import { COLORS } from '@/src/providers/theme.style';
-import { resize } from '@/src/utils/deviceDimentions';
 import Header from '@/src/components/header/header';
-import { useUnauthorizeNavigation } from '@/src/navigators/navigators';
+import InputField from '@/src/components/inputs/inputField';
+import LoadingDots from '@/src/components/loading';
+import DismissKeyboard from '@/src/HOCs/DismissKeyboard';
 import ThemeWrapper from '@/src/HOCs/ThemeWrapper';
+import { useUnauthorizeNavigation } from '@/src/navigators/navigators';
+import { COLORS } from '@/src/providers/theme.style';
+import { useUser } from '@/src/providers/UserContext';
+import { resize } from '@/src/utils/deviceDimentions';
+import Checkbox from 'expo-checkbox';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-type errors = { name: string; email: string; mobile: string };
+type errors = { name: string; email: string; phoneNumber: string };
+const INITIAL_STATE = {
+  name: '',
+  email: '',
+  phoneNumber: '',
+};
 
 const Signup = () => {
   const [isChecked, setChecked] = useState<boolean>(false);
   const navigation = useUnauthorizeNavigation();
-  const handleOnPressSignUp = () => {
-    console.log('form: ', form);
-    navigation.navigate('OTPVerification');
-  };
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-  });
-
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-  });
+  const { updateUser } = useUser();
+  const [form, setForm] = useState(INITIAL_STATE);
+  const [errors, setErrors] = useState(INITIAL_STATE);
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
-    const newErrors: errors = {
-      name: '',
-      email: '',
-      mobile: '',
-    };
+    const newErrors: errors = INITIAL_STATE;
 
     if (!form.name.trim()) {
       newErrors.name = 'Name is required';
@@ -48,24 +41,50 @@ const Signup = () => {
       newErrors.email = 'Invalid email format';
     }
 
-    if (!form.mobile.trim()) {
-      newErrors.mobile = 'Mobile number is required';
-    } else if (!/^\d+$/.test(form.mobile)) {
-      newErrors.mobile = 'Mobile number must contain only digits';
+    if (!form.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Mobile number is required';
+    } else if (!/^\d+$/.test(form.phoneNumber)) {
+      newErrors.phoneNumber = 'Mobile number must contain only digits';
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = () => {
-    if (validate()) {
-      console.log('Form Submitted:', form);
+    console.log('Object.keys(newErrors).length', Object.keys(newErrors).length);
+    for (const key of Object.keys(errors)) {
+      if (errors[key] !== '') {
+        return false;
+      }
     }
+    return true;
   };
 
   const handleChange = (field: string, value: string) => {
     setForm({ ...form, [field]: value });
+  };
+
+  const handleOnPressSignUp = async () => {
+    const validated = validate();
+    if (!validated) {
+      return;
+    }
+    updateUser(form);
+    try {
+      setLoading(true);
+      const response = await axiosInstance.post('/api/auth/signup', {
+        email: form.email,
+        name: form.name,
+        phoneNumber: form.phoneNumber,
+      });
+      if (response.status !== 200) {
+        console.log('🚀 ~ handleVerifyOTP ~ response?.data?.error:', response?.data?.error);
+      } else {
+        setLoading(false);
+        navigation.navigate('OTPVerification');
+      }
+    } catch (error: any) {
+      console.log('🚀 ~ handleVerifyOTP ~ error?.response:', error?.response?.data?.error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,10 +109,10 @@ const Signup = () => {
               <InputField
                 placeholder="Mobile Number"
                 keyboardType="decimal-pad"
-                value={form.mobile}
-                onChangeText={(text) => handleChange('mobile', text)}
+                value={form.phoneNumber}
+                onChangeText={(text) => handleChange('phoneNumber', text)}
               />
-              {errors.mobile && <Text style={styles.errorText}>{errors.mobile}</Text>}
+              {errors.phoneNumber && <Text style={styles.errorText}>{errors.phoneNumber}</Text>}
 
               {/* <InputField
                 placeholder="Password"
@@ -118,7 +137,16 @@ const Signup = () => {
                 </View>
               </View>
               <View>
-                <LargeButton title="Sign Up" onPress={handleOnPressSignUp} />
+                <LargeButton
+                  title={
+                    loading ? (
+                      <LoadingDots dotColor="#fff" dotSize={12} duration={400} />
+                    ) : (
+                      `Sign Up`
+                    )
+                  }
+                  onPress={handleOnPressSignUp}
+                />
               </View>
               <View style={styles.loginTextContainer}>
                 <Text style={styles.loginText}>
