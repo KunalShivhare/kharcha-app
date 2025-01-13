@@ -144,7 +144,7 @@ const AddExpense = () => {
                   </View>
                   <Text variant="label3_regular">Add</Text>
                 </Pressable>
-                {membersList.map((member) => {
+                {membersList.map((member, index) => {
                   return (
                     <Pressable
                       style={[
@@ -158,6 +158,7 @@ const AddExpense = () => {
                         },
                       ]}
                       onPress={() => removeMemberFromExpense(member)}
+                      key={index}
                     >
                       <View
                         style={{
