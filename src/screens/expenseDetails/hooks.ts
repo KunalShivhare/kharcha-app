@@ -8,9 +8,9 @@ const useExpenseDetails = ({ expenseId }: { expenseId: string }) => {
   );
   const navigation = useAuthorizeNavigation();
   const handleEdit = () => {
-    console.log('Edited');
     navigation.navigate('AddExpense', {
       expenseId: expenseId,
+      groupId: expenseDetail?.groupId,
     });
   };
 

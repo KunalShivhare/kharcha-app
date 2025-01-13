@@ -6,6 +6,7 @@ import { distributeEqualPrice } from '@/src/utilities/expenseUtils';
 import { faker } from '@faker-js/faker/.';
 import { useEffect, useRef, useState } from 'react';
 import { TextInput } from 'react-native';
+import { useShallow } from 'zustand/react/shallow';
 
 export enum SPLIT_TYPE {
   EQUALLY = 'equally',
@@ -13,13 +14,15 @@ export enum SPLIT_TYPE {
   // PERCENTAGE = 'percentage',
 }
 
-const useAddExpense = ({ groupId }: { groupId?: string }) => {
+const useAddExpense = ({ groupId, expenseId }: { groupId?: string; expenseId?: string }) => {
   const [description, setDescription] = useState<string>('');
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const [splitType, setSplitType] = useState<SPLIT_TYPE>(SPLIT_TYPE.EQUALLY);
   const amountRef = useRef<TextInput>(null);
   const { self } = useSelfStore();
-  const { addExpense } = useExpenseStore();
+  const [addExpense, editExpense, currentExpense] = useExpenseStore(
+    useShallow((state) => [state.addExpense, state.editExpense, state.getExpense(expenseId ?? '')])
+  );
   const navigation = useAuthorizeNavigation();
   const [membersList, setMembersList] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState();
@@ -39,6 +42,16 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
       setMembersList(members);
     }
   }, [group]);
+
+  useEffect(() => {
+    if (currentExpense) {
+      setPaidByUser(currentExpense?.paidByUser);
+      setAmount(currentExpense?.amount);
+      setDescription(currentExpense?.description);
+      setSplitType(currentExpense?.splitType);
+      setMembersList(currentExpense?.person);
+    }
+  }, [currentExpense]);
 
   const onEndEditing = () => {
     if (splitType !== SPLIT_TYPE.EQUALLY) return;
@@ -67,22 +80,39 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
     } else {
       totalOwed = personalAmount?.amount;
     }
-    const expense = {
-      id: faker.database.mongodbObjectId(),
-      avatar: faker.image.avatar(),
-      description: description,
-      splitType: splitType,
-      amount: amount,
-      groupId: groupId,
-      person: membersList,
-      totalLent: totalLent ?? null,
-      totalOwed: totalOwed ?? null,
-      expenseType: expenseType,
-      paidByUser: paidByUser,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    await addExpense(expense);
+    if (!currentExpense) {
+      const expense = {
+        id: faker.database.mongodbObjectId(),
+        avatar: faker.image.avatar(),
+        description: description,
+        splitType: splitType,
+        amount: amount,
+        groupId: groupId,
+        person: membersList,
+        totalLent: totalLent ?? null,
+        totalOwed: totalOwed ?? null,
+        expenseType: expenseType,
+        paidByUser: paidByUser,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      await addExpense(expense);
+    } else {
+      const expense = {
+        ...currentExpense,
+        description: description,
+        splitType: splitType,
+        amount: amount,
+        person: membersList,
+        totalLent: totalLent ?? null,
+        totalOwed: totalOwed ?? null,
+        expenseType: expenseType,
+        paidByUser: paidByUser,
+        updatedAt: new Date(),
+      };
+      editExpense(expense);
+    }
+
     navigation.goBack();
   };
 
@@ -139,7 +169,7 @@ const useAddExpense = ({ groupId }: { groupId?: string }) => {
       const { persons }: { persons: any } = distributeEqualPrice(amount ?? 0, membersList);
       setMembersList([...persons]);
     }
-    if (item === SPLIT_TYPE.UNEQUALLY) {
+    if (item === SPLIT_TYPE.UNEQUALLY && !expenseId) {
       const persons = membersList.map((item: any) => {
         return {
           ...item,

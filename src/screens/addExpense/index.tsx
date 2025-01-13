@@ -40,7 +40,7 @@ const AddExpense = () => {
     'https://picsum.photos/200',
   ];
   const { params } = useRoute<AuthorizeNavigationProp<'AddExpense'>>();
-  const { groupId } = params;
+  const { groupId, expenseId } = params;
   const theme = useTheme();
 
   const {
@@ -64,6 +64,7 @@ const AddExpense = () => {
     handleSetUnequally,
   } = useAddExpense({
     groupId: groupId?.toString() ?? '',
+    expenseId: expenseId?.toString() ?? '',
   });
 
   const isKeyboardVisible = useKeyboardStatus();
