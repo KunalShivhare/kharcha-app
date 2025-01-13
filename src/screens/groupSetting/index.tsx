@@ -60,6 +60,29 @@ const GroupSetting = () => {
                 </VStack>
               </HStack>
             </Pressable>
+            {currentGroup?.members?.map((member: any, index: number) => {
+              console.log('🚀 ~ {currentGroup?.members?.map ~ member:', member);
+              return (
+                <HStack key={String(index)} style={[padding.v16, Layout.alignCenter]}>
+                  <Image
+                    source={{ uri: faker.image.avatar() }}
+                    style={{
+                      height: 50,
+                      width: 50,
+                      borderRadius: 50,
+                    }}
+                  />
+                  <VStack>
+                    <Text variant="label3_regular" fontColor="white" style={[padding.l16]}>
+                      {member?.name}
+                    </Text>
+                    <Text variant="label3_regular" fontColor="white" style={[padding.l16]}>
+                      {member?.phoneNumber}
+                    </Text>
+                  </VStack>
+                </HStack>
+              );
+            })}
           </VStack>
         </VStack>
       </>
