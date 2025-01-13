@@ -5,6 +5,7 @@ import { COLORS } from '../../providers/theme.style';
 import { resize } from '../../utils/deviceDimentions';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { useAuthorizeNavigation, useUnauthorizeNavigation } from '@/src/navigators/navigators';
+import { Layout } from '../themes/globalStyles';
 
 const Header: React.FC<{
   title: string;
@@ -27,7 +28,7 @@ const Header: React.FC<{
       <View style={styles.headerSubContainer}>
         {showBackButton ? (
           <Pressable style={styles.backButtonContainer} onPress={handleOnPressBackButton}>
-            <AntDesign name="leftcircle" size={32} color="white" />
+            <AntDesign name="arrowleft" size={32} color="white" />
           </Pressable>
         ) : (
           <View style={styles.flex10Percent}></View>
@@ -36,7 +37,9 @@ const Header: React.FC<{
           <Text style={[styles.title, titleStyle]}>{title}</Text>
         </View>
         {customRightElement ? (
-          <View style={[styles.flex10Percent, styles.customRightElementContainer]}>
+          <View
+            style={[styles.flex10Percent, styles.customRightElementContainer, Layout.alignFlexEnd]}
+          >
             {customRightElement}
           </View>
         ) : (
@@ -62,7 +65,7 @@ const styles = StyleSheet.create({
     marginHorizontal: resize(16),
   },
   flex10Percent: {
-    flex: 0.1,
+    flex: 0.15,
   },
   backButtonContainer: {
     flex: 0.1,
